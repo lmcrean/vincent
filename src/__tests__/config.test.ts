@@ -7,18 +7,18 @@ import { ConfigManager } from '../config.js';
 import { ConfigError } from '../utils/errors.js';
 
 // Mock os.homedir to use a temp directory for testing
+const mockHomedir = vi.fn();
 vi.mock('os', async () => {
   const actual = await vi.importActual('os');
   return {
     ...actual,
-    homedir: vi.fn()
+    homedir: mockHomedir
   };
 });
 
 describe('ConfigManager', () => {
   let configManager: ConfigManager;
   let tempHomeDir: string;
-  let mockHomedir: any;
 
   beforeEach(async () => {
     // Create a temporary directory to act as home directory
@@ -26,7 +26,6 @@ describe('ConfigManager', () => {
     await fs.ensureDir(tempHomeDir);
 
     // Mock os.homedir to return our temp directory
-    mockHomedir = vi.mocked(os.homedir);
     mockHomedir.mockReturnValue(tempHomeDir);
 
     configManager = new ConfigManager();

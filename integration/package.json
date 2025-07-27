@@ -1,0 +1,16 @@
+{
+  "name": "vincent-integration-tests",
+  "version": "1.0.0",
+  "description": "Integration tests for Vincent Anki image generator",
+  "type": "module",
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "test:ui": "vitest --ui"
+  },
+  "devDependencies": {
+    "vitest": "^1.0.0",
+    "@vitest/ui": "^1.0.0"
+  }
+}

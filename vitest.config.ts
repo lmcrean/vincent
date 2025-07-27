@@ -6,9 +6,9 @@ export default defineConfig({
     globals: true,
     environment: 'node',
     include: ['src/**/__tests__/**/*.test.ts'],
-    exclude: ['node_modules', 'dist'],
+    exclude: ['node_modules', 'dist', 'integration'],
     coverage: {
-      provider: 'c8',
+      provider: 'v8',
       reporter: ['text', 'json', 'html'],
       exclude: [
         'node_modules/',
@@ -16,7 +16,8 @@ export default defineConfig({
         'src/**/__tests__/**',
         '**/*.d.ts',
         'build/',
-        'docs/'
+        'docs/',
+        'integration/'
       ],
       thresholds: {
         global: {
