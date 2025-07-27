@@ -4,14 +4,19 @@ import os from 'os';
 import { Config, ImageStyle } from './types.js';
 import { ConfigError } from './utils/errors.js';
 
-const CONFIG_DIR = path.join(os.homedir(), '.vincent');
-const CONFIG_FILE = path.join(CONFIG_DIR, 'config.json');
-
 export class ConfigManager {
+  private get configDir(): string {
+    return path.join(os.homedir(), '.vincent');
+  }
+
+  private get configFile(): string {
+    return path.join(this.configDir, 'config.json');
+  }
+
   async getConfig(): Promise<Config | null> {
     try {
-      if (await fs.pathExists(CONFIG_FILE)) {
-        const content = await fs.readFile(CONFIG_FILE, 'utf8');
+      if (await fs.pathExists(this.configFile)) {
+        const content = await fs.readFile(this.configFile, 'utf8');
         return JSON.parse(content);
       }
       return null;
@@ -22,8 +27,8 @@ export class ConfigManager {
 
   async saveConfig(config: Config): Promise<void> {
     try {
-      await fs.ensureDir(CONFIG_DIR);
-      await fs.writeFile(CONFIG_FILE, JSON.stringify(config, null, 2));
+      await fs.ensureDir(this.configDir);
+      await fs.writeFile(this.configFile, JSON.stringify(config, null, 2));
     } catch (error) {
       throw new ConfigError(`Failed to save configuration: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }

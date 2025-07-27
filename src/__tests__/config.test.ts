@@ -1,18 +1,16 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import fs from 'fs-extra';
 import path from 'path';
-import os from 'os';
 import { tmpdir } from 'os';
 import { ConfigManager } from '../config.js';
 import { ConfigError } from '../utils/errors.js';
 
-// Mock os.homedir to use a temp directory for testing
-const mockHomedir = vi.fn();
+// Mock os module - move mock function inside mock factory
 vi.mock('os', async () => {
   const actual = await vi.importActual('os');
   return {
     ...actual,
-    homedir: mockHomedir
+    homedir: vi.fn()
   };
 });
 
@@ -26,7 +24,8 @@ describe('ConfigManager', () => {
     await fs.ensureDir(tempHomeDir);
 
     // Mock os.homedir to return our temp directory
-    mockHomedir.mockReturnValue(tempHomeDir);
+    const os = await import('os');
+    vi.mocked(os.homedir).mockReturnValue(tempHomeDir);
 
     configManager = new ConfigManager();
   });
