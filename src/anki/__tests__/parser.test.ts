@@ -78,7 +78,7 @@ describe('AnkiParser', () => {
       await fs.writeFile(path.join(mediaDir, 'test-image.png'), 'mock-image-data');
     });
 
-    it('should successfully parse a valid .apkg file', async () => {
+    it('should successfully parse a valid .txt file', async () => {
       // Mock database queries
       const mockGetStmt = {
         get: vi.fn().mockReturnValue({
@@ -115,7 +115,7 @@ describe('AnkiParser', () => {
         return { get: vi.fn(), all: vi.fn() };
       });
 
-      const result = await parser.parseApkg('/path/to/test.apkg');
+      const result = await parser.parseApkg('/path/to/test.txt');
 
       expect(result.name).toBe('Biology Deck');
       expect(result.cards).toHaveLength(2);
@@ -151,7 +151,7 @@ describe('AnkiParser', () => {
         return mockAllStmt;
       });
 
-      const result = await parser.parseApkg('/path/to/test.apkg');
+      const result = await parser.parseApkg('/path/to/test.txt');
 
       expect(result.name).toBe('Unknown Deck');
       expect(result.cards).toHaveLength(0);
@@ -182,7 +182,7 @@ describe('AnkiParser', () => {
         return mockAllStmt;
       });
 
-      const result = await parser.parseApkg('/path/to/test.apkg');
+      const result = await parser.parseApkg('/path/to/test.txt');
 
       expect(result.cards[0].question).toBe('HTML Question');
       expect(result.cards[0].answer).toBe('HTML Answer');
@@ -192,8 +192,8 @@ describe('AnkiParser', () => {
       // Mock existsSync to return false for collection.anki2
       existsSyncSpy.mockReturnValue(false);
 
-      await expect(parser.parseApkg('/path/to/test.apkg')).rejects.toThrow(FileError);
-      await expect(parser.parseApkg('/path/to/test.apkg')).rejects.toThrow('missing collection.anki2');
+      await expect(parser.parseApkg('/path/to/test.txt')).rejects.toThrow(FileError);
+      await expect(parser.parseApkg('/path/to/test.txt')).rejects.toThrow('missing collection.anki2');
     });
 
     it('should throw FileError when zip extraction fails', async () => {
@@ -201,7 +201,7 @@ describe('AnkiParser', () => {
         throw new Error('Extraction failed');
       });
 
-      await expect(parser.parseApkg('/path/to/test.apkg')).rejects.toThrow(FileError);
+      await expect(parser.parseApkg('/path/to/test.txt')).rejects.toThrow(FileError);
     });
 
     it('should handle database errors gracefully', async () => {
@@ -209,7 +209,7 @@ describe('AnkiParser', () => {
         throw new Error('Database connection failed');
       });
 
-      await expect(parser.parseApkg('/path/to/test.apkg')).rejects.toThrow(FileError);
+      await expect(parser.parseApkg('/path/to/test.txt')).rejects.toThrow(FileError);
     });
 
     it('should handle missing media directory', async () => {
@@ -237,7 +237,7 @@ describe('AnkiParser', () => {
         return mockAllStmt;
       });
 
-      const result = await parser.parseApkg('/path/to/test.apkg');
+      const result = await parser.parseApkg('/path/to/test.txt');
 
       expect(result.name).toBe('Test Deck');
       expect(result.mediaFiles.size).toBe(0);
@@ -270,7 +270,7 @@ describe('AnkiParser', () => {
       });
 
       // Parse to set up temp directory
-      await parser.parseApkg('/path/to/test.apkg');
+      await parser.parseApkg('/path/to/test.txt');
 
       // Verify temp directory was set
       expect(parser.getTempDir()).toBe(tempDir);
@@ -291,7 +291,7 @@ describe('AnkiParser', () => {
         throw new Error('Extraction failed');
       });
 
-      await expect(parser.parseApkg('/path/to/fail.apkg')).rejects.toThrow();
+      await expect(parser.parseApkg('/path/to/fail.txt')).rejects.toThrow();
 
       // Temp directory should be cleaned up (set to null)
       expect(parser.getTempDir()).toBeNull();
@@ -323,7 +323,7 @@ describe('AnkiParser', () => {
         return mockAllStmt;
       });
 
-      await parser.parseApkg('/path/to/test.apkg');
+      await parser.parseApkg('/path/to/test.txt');
 
       expect(parser.getTempDir()).toBe(tempDir);
     });
@@ -361,7 +361,7 @@ describe('AnkiParser', () => {
         return mockAllStmt;
       });
 
-      const result = await parser.parseApkg('/path/to/test.apkg');
+      const result = await parser.parseApkg('/path/to/test.txt');
 
       expect(result.cards[0].question).toBe('Question with bold and italic');
       expect(result.cards[0].answer).toBe('Answer with <brackets> and spaces & symbols');
@@ -400,7 +400,7 @@ describe('AnkiParser', () => {
         return mockAllStmt;
       });
 
-      const result = await parser.parseApkg('/path/to/test.apkg');
+      const result = await parser.parseApkg('/path/to/test.txt');
 
       expect(result.cards[0].tags).toEqual(['tag1', 'tag2', 'tag3']);
     });
@@ -430,7 +430,7 @@ describe('AnkiParser', () => {
         return mockAllStmt;
       });
 
-      const result = await parser.parseApkg('/path/to/test.apkg');
+      const result = await parser.parseApkg('/path/to/test.txt');
 
       expect(result.cards[0].tags).toEqual([]);
     });

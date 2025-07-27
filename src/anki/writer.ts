@@ -19,7 +19,7 @@ export class AnkiWriter {
       // Create temp directory for building enhanced deck
       this.tempDir = await createTempDir();
       
-      // Extract original .apkg
+      // Extract original .txt
       const zip = new AdmZip(originalApkgPath);
       zip.extractAllTo(this.tempDir, true);
       
@@ -29,7 +29,7 @@ export class AnkiWriter {
       // Copy generated images to media directory
       await this.addGeneratedImages(generatedImages);
       
-      // Create enhanced .apkg file
+      // Create enhanced .txt file
       await this.createApkgFile(outputPath);
       
     } catch (error) {
@@ -37,7 +37,7 @@ export class AnkiWriter {
       if (error instanceof FileError) {
         throw error;
       }
-      throw new FileError(`Failed to create enhanced .apkg: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      throw new FileError(`Failed to create enhanced .txt: ${error instanceof Error ? error.message : 'Unknown error'}`);
     } finally {
       await this.cleanup();
     }
@@ -164,7 +164,7 @@ export class AnkiWriter {
       }
     }
     
-    // Write the .apkg file
+    // Write the .txt file
     zip.writeZip(outputPath);
   }
 

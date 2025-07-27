@@ -20,8 +20,8 @@ export async function fileExists(filePath: string): Promise<boolean> {
 }
 
 export function validateApkgFile(filePath: string): void {
-  if (!filePath.endsWith('.apkg')) {
-    throw new FileError(`File '${filePath}' is not a valid Anki deck (.apkg)`);
+  if (!filePath.endsWith('.txt')) {
+    throw new FileError(`File '${filePath}' is not a valid Anki deck (.txt)`);
   }
   
   if (!fs.existsSync(filePath)) {
@@ -31,8 +31,8 @@ export function validateApkgFile(filePath: string): void {
 
 export function generateOutputFilename(inputPath: string, suffix: string = 'illustrated'): string {
   const dir = path.dirname(inputPath);
-  const baseName = path.basename(inputPath, '.apkg');
-  return path.join(dir, `${baseName}-${suffix}.apkg`);
+  const baseName = path.basename(inputPath, '.txt');
+  return path.join(dir, `${baseName}-${suffix}.txt`);
 }
 
 export async function createTempDir(): Promise<string> {

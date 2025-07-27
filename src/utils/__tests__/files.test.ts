@@ -95,7 +95,7 @@ describe('validateApkgFile', () => {
   beforeEach(async () => {
     tempDir = path.join(tmpdir(), 'vincent-test-' + Date.now());
     await fs.ensureDir(tempDir);
-    validApkgFile = path.join(tempDir, 'test.apkg');
+    validApkgFile = path.join(tempDir, 'test.txt');
     await fs.writeFile(validApkgFile, 'mock anki data');
   });
 
@@ -107,19 +107,19 @@ describe('validateApkgFile', () => {
     }
   });
 
-  it('should pass validation for valid .apkg file', () => {
+  it('should pass validation for valid .txt file', () => {
     expect(() => validateApkgFile(validApkgFile)).not.toThrow();
   });
 
-  it('should throw FileError for non-.apkg file', () => {
+  it('should throw FileError for non-.txt file', () => {
     const txtFile = path.join(tempDir, 'test.txt');
     
     expect(() => validateApkgFile(txtFile)).toThrow(FileError);
     expect(() => validateApkgFile(txtFile)).toThrow('not a valid Anki deck');
   });
 
-  it('should throw FileError for non-existing .apkg file', () => {
-    const nonExistentFile = path.join(tempDir, 'nonexistent.apkg');
+  it('should throw FileError for non-existing .txt file', () => {
+    const nonExistentFile = path.join(tempDir, 'nonexistent.txt');
     
     expect(() => validateApkgFile(nonExistentFile)).toThrow(FileError);
     expect(() => validateApkgFile(nonExistentFile)).toThrow('Could not find file');
@@ -135,38 +135,38 @@ describe('validateApkgFile', () => {
 
 describe('generateOutputFilename', () => {
   it('should generate output filename with default suffix', () => {
-    const inputPath = '/path/to/my-deck.apkg';
+    const inputPath = '/path/to/my-deck.txt';
     const result = generateOutputFilename(inputPath);
     
-    expect(result).toBe(path.join('/path/to', 'my-deck-illustrated.apkg'));
+    expect(result).toBe(path.join('/path/to', 'my-deck-illustrated.txt'));
   });
 
   it('should generate output filename with custom suffix', () => {
-    const inputPath = '/path/to/my-deck.apkg';
+    const inputPath = '/path/to/my-deck.txt';
     const result = generateOutputFilename(inputPath, 'enhanced');
     
-    expect(result).toBe(path.join('/path/to', 'my-deck-enhanced.apkg'));
+    expect(result).toBe(path.join('/path/to', 'my-deck-enhanced.txt'));
   });
 
   it('should handle windows paths', () => {
-    const inputPath = 'C:\\Users\\Documents\\my-deck.apkg';
+    const inputPath = 'C:\\Users\\Documents\\my-deck.txt';
     const result = generateOutputFilename(inputPath, 'images');
     
-    expect(result).toBe(path.join('C:\\Users\\Documents', 'my-deck-images.apkg'));
+    expect(result).toBe(path.join('C:\\Users\\Documents', 'my-deck-images.txt'));
   });
 
   it('should handle paths with multiple dots', () => {
-    const inputPath = '/path/to/my.test.deck.apkg';
+    const inputPath = '/path/to/my.test.deck.txt';
     const result = generateOutputFilename(inputPath);
     
-    expect(result).toBe(path.join('/path/to', 'my.test.deck-illustrated.apkg'));
+    expect(result).toBe(path.join('/path/to', 'my.test.deck-illustrated.txt'));
   });
 
   it('should handle relative paths', () => {
-    const inputPath = './my-deck.apkg';
+    const inputPath = './my-deck.txt';
     const result = generateOutputFilename(inputPath);
     
-    expect(result).toBe(path.join('.', 'my-deck-illustrated.apkg'));
+    expect(result).toBe(path.join('.', 'my-deck-illustrated.txt'));
   });
 });
 

@@ -94,7 +94,7 @@ describe('logger', () => {
 
   describe('message formatting', () => {
     it('should handle messages with special characters', () => {
-      const message = 'File: /path/to/file.apkg (100%)';
+      const message = 'File: /path/to/file.txt (100%)';
       logger.info(message);
 
       expect(consoleSpy.log).toHaveBeenCalledWith(

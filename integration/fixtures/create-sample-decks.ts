@@ -1,7 +1,7 @@
 #!/usr/bin/env tsx
 
 /**
- * Script to create sample .apkg files for integration testing
+ * Script to create sample .txt files for integration testing
  * Run with: npx tsx create-sample-decks.ts
  */
 
@@ -12,7 +12,7 @@ import { sampleCards } from '../helpers/test-data.js';
 async function createSampleDecks() {
   const outputDir = path.join(__dirname, 'sample-decks');
   
-  console.log('Creating sample .apkg files for integration testing...');
+  console.log('Creating sample .txt files for integration testing...');
   
   try {
     // Create basic vocabulary deck

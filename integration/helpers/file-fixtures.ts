@@ -18,11 +18,11 @@ export interface CreateApkgOptions {
 }
 
 /**
- * Creates a temporary .apkg file for testing
+ * Creates a temporary .txt file for testing
  */
 export async function createTestApkg(options: CreateApkgOptions): Promise<string> {
   const tempDir = await tmp.dir({ prefix: 'vincent-test-apkg-' });
-  const apkgPath = path.join(tempDir.path, `${options.deckName}.apkg`);
+  const apkgPath = path.join(tempDir.path, `${options.deckName}.txt`);
   
   // Create collection.anki2 database
   const dbPath = path.join(tempDir.path, 'collection.anki2');
@@ -199,7 +199,7 @@ export async function createTestApkg(options: CreateApkgOptions): Promise<string
   
   await fs.writeFile(path.join(tempDir.path, 'media'), mediaContent);
   
-  // Create .apkg zip file
+  // Create .txt zip file
   const zip = new AdmZip();
   zip.addLocalFile(dbPath);
   zip.addLocalFile(path.join(tempDir.path, 'media'));
@@ -243,13 +243,13 @@ export async function createTestOutputDir(): Promise<string> {
 }
 
 /**
- * Validates that an .apkg file contains expected content
+ * Validates that an .txt file contains expected content
  */
 export async function validateApkgContent(apkgPath: string, expectedCards: TestAnkiCard[]): Promise<boolean> {
   const tempDir = await tmp.dir({ prefix: 'vincent-validate-apkg-' });
   
   try {
-    // Extract .apkg
+    // Extract .txt
     const zip = new AdmZip(apkgPath);
     zip.extractAllTo(tempDir.path, true);
     

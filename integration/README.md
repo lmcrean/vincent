@@ -6,10 +6,10 @@ This directory contains comprehensive integration tests for the Vincent Anki ima
 
 Integration tests verify that Vincent's components work together correctly in real-world scenarios. They test:
 
-- **End-to-end workflows**: Complete deck processing from .apkg input to enhanced output
+- **End-to-end workflows**: Complete deck processing from .txt input to enhanced output
 - **Component integration**: How different modules interact (parser, generator, config, CLI)
 - **External service integration**: API calls, file system operations, error handling
-- **Real file operations**: Actual .apkg parsing and generation
+- **Real file operations**: Actual .txt parsing and generation
 - **Error scenarios**: Network failures, invalid inputs, permission issues
 
 ## Structure
@@ -20,14 +20,14 @@ integration/
 ├── package.json              # Independent package for isolation
 ├── README.md                 # This file
 ├── fixtures/                 # Test data and sample files
-│   ├── sample-decks/         # Generated .apkg files during tests
+│   ├── sample-decks/         # Generated .txt files during tests
 │   ├── media/                # Sample media files
 │   ├── responses/            # Mock API responses
 │   └── create-sample-decks.ts # Script to generate test fixtures
 ├── helpers/                  # Test utilities and setup
 │   ├── test-setup.ts         # Global test configuration
 │   ├── api-mocks.ts          # MSW handlers for API mocking
-│   ├── file-fixtures.ts      # .apkg file creation utilities
+│   ├── file-fixtures.ts      # .txt file creation utilities
 │   └── test-data.ts          # Sample data generators
 ├── components/               # Component integration tests
 │   ├── anki-parser.test.ts   # Anki file parsing tests
@@ -93,7 +93,7 @@ cd integration && npm test
 ### 1. Component Integration Tests (`components/`)
 
 **Anki Parser Tests** (`anki-parser.test.ts`):
-- Parse real .apkg files with various content types
+- Parse real .txt files with various content types
 - Handle corrupted files and edge cases
 - Memory management and cleanup
 - Performance with large decks
@@ -142,7 +142,7 @@ cd integration && npm test
 
 ### Sample Decks
 
-Tests use dynamically generated .apkg files with various content:
+Tests use dynamically generated .txt files with various content:
 
 - **Vocabulary**: Basic Q&A pairs for language learning
 - **Medical**: Medical terminology with complex content
@@ -167,8 +167,8 @@ MSW (Mock Service Worker) handles API mocking:
 
 Helper functions for file operations:
 
-- `createTestApkg()`: Generate valid .apkg files
-- `validateApkgContent()`: Verify .apkg file integrity
+- `createTestApkg()`: Generate valid .txt files
+- `validateApkgContent()`: Verify .txt file integrity
 - `createTestOutputDir()`: Temporary directories for tests
 - `createSampleImage()`: Generate test image data
 

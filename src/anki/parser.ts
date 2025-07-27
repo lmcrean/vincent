@@ -14,14 +14,14 @@ export class AnkiParser {
       // Create temp directory for extraction
       this.tempDir = await createTempDir();
       
-      // Extract .apkg file (it's a zip)
+      // Extract .txt file (it's a zip)
       const zip = new AdmZip(apkgPath);
       zip.extractAllTo(this.tempDir, true);
       
       // Parse collection database
       const dbPath = path.join(this.tempDir, 'collection.anki2');
       if (!fs.existsSync(dbPath)) {
-        throw new FileError('Invalid .apkg file: missing collection.anki2');
+        throw new FileError('Invalid .txt file: missing collection.anki2');
       }
       
       const db = new Database(dbPath);
@@ -48,7 +48,7 @@ export class AnkiParser {
       if (error instanceof FileError) {
         throw error;
       }
-      throw new FileError(`Failed to parse .apkg file: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      throw new FileError(`Failed to parse .txt file: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
   }
 

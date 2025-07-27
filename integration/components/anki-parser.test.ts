@@ -22,7 +22,7 @@ describe('AnkiParser Integration Tests', () => {
 
   describe('parseApkg', () => {
     it('should parse a basic vocabulary deck correctly', async () => {
-      // Create test .apkg file
+      // Create test .txt file
       const apkgPath = await createTestApkg({
         deckName: 'Vocabulary Test',
         cards: sampleCards.vocabulary
@@ -135,16 +135,16 @@ describe('AnkiParser Integration Tests', () => {
     });
 
     it('should throw FileError for non-existent file', async () => {
-      const nonExistentPath = path.join(tempOutputDir, 'does-not-exist.apkg');
+      const nonExistentPath = path.join(tempOutputDir, 'does-not-exist.txt');
       
       await expect(parser.parseApkg(nonExistentPath))
         .rejects
         .toThrow(FileError);
     });
 
-    it('should throw FileError for invalid .apkg file', async () => {
-      // Create a file that's not a valid .apkg
-      const invalidPath = path.join(tempOutputDir, 'invalid.apkg');
+    it('should throw FileError for invalid .txt file', async () => {
+      // Create a file that's not a valid .txt
+      const invalidPath = path.join(tempOutputDir, 'invalid.txt');
       await fs.writeFile(invalidPath, 'not a zip file');
       
       await expect(parser.parseApkg(invalidPath))
@@ -152,13 +152,13 @@ describe('AnkiParser Integration Tests', () => {
         .toThrow(FileError);
     });
 
-    it('should throw FileError for .apkg without collection.anki2', async () => {
+    it('should throw FileError for .txt without collection.anki2', async () => {
       // Create a zip file without the required database
       const AdmZip = (await import('adm-zip')).default;
       const zip = new AdmZip();
       zip.addFile('random-file.txt', Buffer.from('content'));
       
-      const invalidPath = path.join(tempOutputDir, 'no-collection.apkg');
+      const invalidPath = path.join(tempOutputDir, 'no-collection.txt');
       zip.writeZip(invalidPath);
       
       await expect(parser.parseApkg(invalidPath))

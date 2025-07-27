@@ -15,7 +15,7 @@ program
   .name('vincent')
   .description('AI image generator for Anki flashcards using Gemini API')
   .version('1.0.0')
-  .argument('[deck]', 'Path to .apkg file')
+  .argument('[deck]', 'Path to .txt file')
   .option('-o, --output <path>', 'Output file path')
   .option('-s, --style <style>', 'Image style (educational, medical, colorful)', 'educational')
   .option('-c, --concurrency <number>', 'Number of concurrent image generations (1-10)', '3')
@@ -45,7 +45,7 @@ async function runVincent(deckPath: string, options: CLIOptions): Promise<void> 
       const response = await prompts({
         type: 'text',
         name: 'deckPath',
-        message: 'Enter path to your .apkg file:',
+        message: 'Enter path to your .txt file:',
         validate: (value: string) => value.trim() ? true : 'Please provide a file path'
       });
       

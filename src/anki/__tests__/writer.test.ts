@@ -125,11 +125,11 @@ describe('AnkiWriter', () => {
   });
 
   describe('writeEnhancedApkg', () => {
-    it('should successfully create enhanced .apkg file', async () => {
-      const outputPath = path.join(outputDir, 'enhanced.apkg');
+    it('should successfully create enhanced .txt file', async () => {
+      const outputPath = path.join(outputDir, 'enhanced.txt');
 
       await writer.writeEnhancedApkg(
-        '/path/to/original.apkg',
+        '/path/to/original.txt',
         mockDeck,
         generatedImages,
         outputPath
@@ -148,10 +148,10 @@ describe('AnkiWriter', () => {
     });
 
     it('should update database with image references', async () => {
-      const outputPath = path.join(outputDir, 'enhanced.apkg');
+      const outputPath = path.join(outputDir, 'enhanced.txt');
       
       await writer.writeEnhancedApkg(
-        '/path/to/original.apkg',
+        '/path/to/original.txt',
         mockDeck,
         generatedImages,
         outputPath
@@ -170,10 +170,10 @@ describe('AnkiWriter', () => {
     });
 
     it('should copy generated images to media directory', async () => {
-      const outputPath = path.join(outputDir, 'enhanced.apkg');
+      const outputPath = path.join(outputDir, 'enhanced.txt');
 
       await writer.writeEnhancedApkg(
-        '/path/to/original.apkg',
+        '/path/to/original.txt',
         mockDeck,
         generatedImages,
         outputPath
@@ -185,10 +185,10 @@ describe('AnkiWriter', () => {
     });
 
     it('should create media manifest', async () => {
-      const outputPath = path.join(outputDir, 'enhanced.apkg');
+      const outputPath = path.join(outputDir, 'enhanced.txt');
 
       await writer.writeEnhancedApkg(
-        '/path/to/original.apkg',
+        '/path/to/original.txt',
         mockDeck,
         generatedImages,
         outputPath
@@ -199,10 +199,10 @@ describe('AnkiWriter', () => {
     });
 
     it('should handle existing media manifest', async () => {
-      const outputPath = path.join(outputDir, 'enhanced.apkg');
+      const outputPath = path.join(outputDir, 'enhanced.txt');
 
       await writer.writeEnhancedApkg(
-        '/path/to/original.apkg',
+        '/path/to/original.txt',
         mockDeck,
         generatedImages,
         outputPath
@@ -218,10 +218,10 @@ describe('AnkiWriter', () => {
         throw new Error('Database file not found');
       });
 
-      const outputPath = path.join(outputDir, 'enhanced.apkg');
+      const outputPath = path.join(outputDir, 'enhanced.txt');
 
       await expect(
-        writer.writeEnhancedApkg('/path/to/original.apkg', mockDeck, generatedImages, outputPath)
+        writer.writeEnhancedApkg('/path/to/original.txt', mockDeck, generatedImages, outputPath)
       ).rejects.toThrow(FileError);
     });
 
@@ -229,11 +229,11 @@ describe('AnkiWriter', () => {
       // Remove one of the generated images
       await fs.remove(path.join(outputDir, 'image1.png'));
 
-      const outputPath = path.join(outputDir, 'enhanced.apkg');
+      const outputPath = path.join(outputDir, 'enhanced.txt');
 
       // Should still work but skip missing images
       await expect(
-        writer.writeEnhancedApkg('/path/to/original.apkg', mockDeck, generatedImages, outputPath)
+        writer.writeEnhancedApkg('/path/to/original.txt', mockDeck, generatedImages, outputPath)
       ).resolves.not.toThrow();
 
       // Verify successful completion
@@ -245,10 +245,10 @@ describe('AnkiWriter', () => {
         throw new Error('Database error');
       });
 
-      const outputPath = path.join(outputDir, 'enhanced.apkg');
+      const outputPath = path.join(outputDir, 'enhanced.txt');
 
       await expect(
-        writer.writeEnhancedApkg('/path/to/original.apkg', mockDeck, generatedImages, outputPath)
+        writer.writeEnhancedApkg('/path/to/original.txt', mockDeck, generatedImages, outputPath)
       ).rejects.toThrow(FileError);
     });
 
@@ -257,15 +257,15 @@ describe('AnkiWriter', () => {
         throw new Error('Extraction failed');
       });
 
-      const outputPath = path.join(outputDir, 'enhanced.apkg');
+      const outputPath = path.join(outputDir, 'enhanced.txt');
 
       await expect(
-        writer.writeEnhancedApkg('/path/to/original.apkg', mockDeck, generatedImages, outputPath)
+        writer.writeEnhancedApkg('/path/to/original.txt', mockDeck, generatedImages, outputPath)
       ).rejects.toThrow(FileError);
     });
 
     it('should add images to answer field correctly', async () => {
-      const outputPath = path.join(outputDir, 'enhanced.apkg');
+      const outputPath = path.join(outputDir, 'enhanced.txt');
       const mockUpdateStmt = { run: vi.fn() };
       
       mockDb.prepare.mockImplementation((sql: string) => {
@@ -280,7 +280,7 @@ describe('AnkiWriter', () => {
       });
 
       await writer.writeEnhancedApkg(
-        '/path/to/original.apkg',
+        '/path/to/original.txt',
         mockDeck,
         generatedImages,
         outputPath
@@ -294,10 +294,10 @@ describe('AnkiWriter', () => {
 
     it('should handle cards without images', async () => {
       const limitedImages = new Map([[1, path.join(outputDir, 'image1.png')]]);
-      const outputPath = path.join(outputDir, 'enhanced.apkg');
+      const outputPath = path.join(outputDir, 'enhanced.txt');
 
       await expect(
-        writer.writeEnhancedApkg('/path/to/original.apkg', mockDeck, limitedImages, outputPath)
+        writer.writeEnhancedApkg('/path/to/original.txt', mockDeck, limitedImages, outputPath)
       ).resolves.not.toThrow();
 
       // Should still create the enhanced deck
@@ -308,10 +308,10 @@ describe('AnkiWriter', () => {
   describe('cleanup', () => {
     it('should clean up temp directory', async () => {
       // Manually set temp directory to test cleanup
-      const outputPath = path.join(outputDir, 'test.apkg');
+      const outputPath = path.join(outputDir, 'test.txt');
       
       await writer.writeEnhancedApkg(
-        '/path/to/original.apkg',
+        '/path/to/original.txt',
         mockDeck,
         generatedImages,
         outputPath
@@ -329,10 +329,10 @@ describe('AnkiWriter', () => {
 
   describe('edge cases', () => {
     it('should handle corrupted media manifest', async () => {
-      const outputPath = path.join(outputDir, 'enhanced.apkg');
+      const outputPath = path.join(outputDir, 'enhanced.txt');
 
       await expect(
-        writer.writeEnhancedApkg('/path/to/original.apkg', mockDeck, generatedImages, outputPath)
+        writer.writeEnhancedApkg('/path/to/original.txt', mockDeck, generatedImages, outputPath)
       ).resolves.not.toThrow();
 
       // Verify successful completion
@@ -351,19 +351,19 @@ describe('AnkiWriter', () => {
         };
       });
 
-      const outputPath = path.join(outputDir, 'enhanced.apkg');
+      const outputPath = path.join(outputDir, 'enhanced.txt');
 
       await expect(
-        writer.writeEnhancedApkg('/path/to/original.apkg', mockDeck, generatedImages, outputPath)
+        writer.writeEnhancedApkg('/path/to/original.txt', mockDeck, generatedImages, outputPath)
       ).resolves.not.toThrow();
     });
 
     it('should handle empty generated images map', async () => {
       const emptyImages = new Map<number, string>();
-      const outputPath = path.join(outputDir, 'enhanced.apkg');
+      const outputPath = path.join(outputDir, 'enhanced.txt');
 
       await expect(
-        writer.writeEnhancedApkg('/path/to/original.apkg', mockDeck, emptyImages, outputPath)
+        writer.writeEnhancedApkg('/path/to/original.txt', mockDeck, emptyImages, outputPath)
       ).resolves.not.toThrow();
 
       expect(mockZip.writeZip).toHaveBeenCalledWith(outputPath);

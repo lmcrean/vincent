@@ -13,7 +13,7 @@ describe('End-to-End Deck Processing Tests', () => {
 
   beforeEach(async () => {
     outputDir = await createTestOutputDir();
-    outputApkgPath = path.join(outputDir, 'enhanced-deck.apkg');
+    outputApkgPath = path.join(outputDir, 'enhanced-deck.txt');
     
     // Set valid API key for tests
     process.env.GEMINI_API_KEY = testEnv.validApiKey;
@@ -83,7 +83,7 @@ describe('End-to-End Deck Processing Tests', () => {
       const styles: ImageStyle[] = ['educational', 'medical', 'colorful', 'minimal'];
       
       for (const style of styles) {
-        const styleOutputPath = path.join(outputDir, `${style}-deck.apkg`);
+        const styleOutputPath = path.join(outputDir, `${style}-deck.txt`);
         
         inputApkgPath = await createTestApkg({
           deckName: `${style} Style Test`,
@@ -262,7 +262,7 @@ describe('End-to-End Deck Processing Tests', () => {
       });
 
       // Use nested output path that doesn't exist
-      const nestedOutputPath = path.join(outputDir, 'nested', 'path', 'output.apkg');
+      const nestedOutputPath = path.join(outputDir, 'nested', 'path', 'output.txt');
 
       await processAnkiDeck(
         inputApkgPath,
@@ -392,8 +392,8 @@ describe('End-to-End Deck Processing Tests', () => {
       const isValid = await validateApkgContent(outputApkgPath, sampleCards.vocabulary);
       expect(isValid).toBe(true);
 
-      // Verify output file is a valid .apkg
-      expect(path.extname(outputApkgPath)).toBe('.apkg');
+      // Verify output file is a valid .txt
+      expect(path.extname(outputApkgPath)).toBe('.txt');
       
       // Verify file size is reasonable
       const stats = await fs.stat(outputApkgPath);

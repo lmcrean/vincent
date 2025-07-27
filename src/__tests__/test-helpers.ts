@@ -19,7 +19,7 @@ export const cleanupTempDir = async (dir: string): Promise<void> => {
   }
 };
 
-export const createMockAnkiFile = async (dir: string, fileName: string = 'test.apkg'): Promise<string> => {
+export const createMockAnkiFile = async (dir: string, fileName: string = 'test.txt'): Promise<string> => {
   const filePath = path.join(dir, fileName);
   await fs.writeFile(filePath, Buffer.from('mock-anki-data'));
   return filePath;

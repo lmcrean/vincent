@@ -12,7 +12,7 @@ describe('CLI Integration Tests', () => {
   beforeEach(async () => {
     outputDir = await createTestOutputDir();
     
-    // Create test .apkg file
+    // Create test .txt file
     testApkgPath = await createTestApkg({
       deckName: 'CLI Test Deck',
       cards: sampleCards.single
@@ -55,7 +55,7 @@ describe('CLI Integration Tests', () => {
     });
 
     it('should show error for non-existent input file', async () => {
-      const nonExistentFile = path.join(outputDir, 'does-not-exist.apkg');
+      const nonExistentFile = path.join(outputDir, 'does-not-exist.txt');
       const { stdout, stderr, exitCode } = await runCLI([nonExistentFile]);
 
       expect(exitCode).not.toBe(0);
@@ -69,13 +69,13 @@ describe('CLI Integration Tests', () => {
       const { stdout, stderr, exitCode } = await runCLI([invalidFile]);
 
       expect(exitCode).not.toBe(0);
-      expect(stderr).toContain('not a valid Anki deck (.apkg)');
+      expect(stderr).toContain('not a valid Anki deck (.txt)');
     });
   });
 
   describe('option handling', () => {
     it('should handle --output option correctly', async () => {
-      const customOutput = path.join(outputDir, 'custom-output.apkg');
+      const customOutput = path.join(outputDir, 'custom-output.txt');
       const { stdout, stderr, exitCode } = await runCLI([
         testApkgPath,
         '--output', customOutput,
@@ -83,7 +83,7 @@ describe('CLI Integration Tests', () => {
       ]);
 
       expect(exitCode).toBe(0);
-      expect(stdout).toContain('custom-output.apkg');
+      expect(stdout).toContain('custom-output.txt');
     });
 
     it('should handle --style option correctly', async () => {
@@ -165,7 +165,7 @@ describe('CLI Integration Tests', () => {
     });
 
     it('should not generate any files in dry run mode', async () => {
-      const outputFile = path.join(outputDir, 'test-output.apkg');
+      const outputFile = path.join(outputDir, 'test-output.txt');
       
       const { stdout, stderr, exitCode } = await runCLI([
         testApkgPath,
@@ -275,15 +275,15 @@ describe('CLI Integration Tests', () => {
   });
 
   describe('error handling', () => {
-    it('should handle corrupted .apkg files gracefully', async () => {
-      const corruptedFile = path.join(outputDir, 'corrupted.apkg');
+    it('should handle corrupted .txt files gracefully', async () => {
+      const corruptedFile = path.join(outputDir, 'corrupted.txt');
       await fs.writeFile(corruptedFile, 'not a valid zip file');
       
       const { stdout, stderr, exitCode } = await runCLI([corruptedFile]);
 
       expect(exitCode).not.toBe(0);
-      expect(stderr).toContain('Failed to parse .apkg file');
-      expect(stderr).toContain('.apkg');
+      expect(stderr).toContain('Failed to parse .txt file');
+      expect(stderr).toContain('.txt');
     });
 
     it('should handle permission errors', async () => {
@@ -294,7 +294,7 @@ describe('CLI Integration Tests', () => {
       try {
         await fs.chmod(readOnlyDir, 0o444);
         
-        const outputFile = path.join(readOnlyDir, 'output.apkg');
+        const outputFile = path.join(readOnlyDir, 'output.txt');
         const { stdout, stderr, exitCode } = await runCLI([
           testApkgPath,
           '--output', outputFile,
@@ -313,7 +313,7 @@ describe('CLI Integration Tests', () => {
     });
 
     it('should show user-friendly error messages', async () => {
-      const { stdout, stderr, exitCode } = await runCLI(['invalid-file.apkg']);
+      const { stdout, stderr, exitCode } = await runCLI(['invalid-file.txt']);
 
       expect(exitCode).not.toBe(0);
       expect(stderr).not.toContain('stack trace');
