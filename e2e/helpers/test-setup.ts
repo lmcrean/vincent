@@ -1,5 +1,5 @@
 import { beforeAll, afterEach } from 'vitest'
-import { tmpdir } from 'tmp-promise'
+import { dir as tmpdir } from 'tmp-promise'
 import { ensureDir, remove, pathExists } from 'fs-extra'
 import path from 'path'
 import { CLIRunner } from './cli-runner.js'

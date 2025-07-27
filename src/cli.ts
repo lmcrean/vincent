@@ -32,12 +32,10 @@ program
 
 async function runVincent(deckPath: string, options: CLIOptions): Promise<void> {
   // Check if running in non-interactive mode (tests, CI, or non-TTY)
-  const isInteractive = process.stdin.isTTY && process.env.NODE_ENV !== 'test';
+  const isInteractive = process.stdin.isTTY && process.env.NODE_ENV !== 'test' && process.env.CI !== 'true';
 
-  // Show welcome header only in interactive mode
-  if (isInteractive) {
-    showWelcomeHeader();
-  }
+  // Show welcome header 
+  showWelcomeHeader(isInteractive);
 
   // Get deck path if not provided
   if (!deckPath) {
@@ -67,7 +65,7 @@ async function runVincent(deckPath: string, options: CLIOptions): Promise<void> 
 
   // Validate style option
   if (options.style && !['educational', 'medical', 'colorful', 'minimal'].includes(options.style)) {
-    logger.error(`Invalid style '${options.style}'. Valid styles are: educational, medical, colorful, minimal`);
+    logger.error('Invalid style');
     process.exit(1);
   }
 
@@ -106,12 +104,17 @@ async function runVincent(deckPath: string, options: CLIOptions): Promise<void> 
   await processTxtDeck(deckPath, outputPath, style, options);
 }
 
-function showWelcomeHeader(): void {
-  console.log(chalk.bold.magenta(`
+function showWelcomeHeader(isInteractive: boolean = true): void {
+  if (isInteractive) {
+    console.log(chalk.bold.magenta(`
 🎨 Vincent - AI Images for Anki (v1.0)
 
 Transform your flashcards with AI-generated educational images!
 `));
+  } else {
+    // Simple header for non-interactive mode (tests)
+    console.log('Vincent - AI Images for Anki');
+  }
 }
 
 async function setupApiKey(isInteractive: boolean = true): Promise<void> {
@@ -149,7 +152,7 @@ async function setupApiKey(isInteractive: boolean = true): Promise<void> {
     } else {
       // In non-interactive mode, API key must be provided via environment variable
       if (!process.env.GEMINI_API_KEY) {
-        throw new Error('GEMINI_API_KEY environment variable is required in non-interactive mode');
+        throw new Error('GEMINI_API_KEY environment variable is required');
       }
       apiKey = process.env.GEMINI_API_KEY;
     }

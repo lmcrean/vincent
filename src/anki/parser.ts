@@ -16,7 +16,7 @@ export class TxtParser {
         .filter(line => line.length > 0 && line.includes(';'));
       
       if (lines.length === 0) {
-        throw new FileError('No valid cards found in file. Expected format: "Question;Answer"');
+        throw new FileError('No cards found');
       }
       
       // Extract deck name from filename
@@ -26,7 +26,7 @@ export class TxtParser {
       const cards = lines.map((line, index) => {
         const parts = line.split(';');
         if (parts.length < 2) {
-          throw new FileError(`Invalid card format on line ${index + 1}. Expected "Question;Answer"`);
+          throw new FileError('Invalid deck format');
         }
         
         const question = parts[0].trim();

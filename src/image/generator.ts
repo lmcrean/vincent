@@ -38,7 +38,9 @@ export class ImageGenerator {
     this.promptGenerator = new PromptGenerator(style);
     
     if (this.isMockMode) {
-      console.log('🧪 MOCK MODE ACTIVATED - No real API calls will be made');
+      console.log('🧪 MOCK MODE ACTIVATED');
+      console.log('Using placeholder images for testing');
+      console.log('No external API calls will be made');
     }
   }
 

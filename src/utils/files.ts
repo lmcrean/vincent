@@ -20,12 +20,17 @@ export async function fileExists(filePath: string): Promise<boolean> {
 }
 
 export function validateTxtFile(filePath: string): void {
-  if (!filePath.endsWith('.txt')) {
-    throw new FileError(`File '${filePath}' is not a valid text file (.txt)`);
+  if (!fs.existsSync(filePath)) {
+    throw new FileError('File not found');
   }
   
-  if (!fs.existsSync(filePath)) {
-    throw new FileError(`Could not find file '${filePath}'`);
+  const stats = fs.statSync(filePath);
+  if (stats.isDirectory()) {
+    throw new FileError('Path must be a file, not a directory');
+  }
+  
+  if (!filePath.endsWith('.txt')) {
+    throw new FileError('Input file must be a .txt file');
   }
 }
 
