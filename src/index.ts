@@ -1,26 +1,26 @@
 import path from 'path';
 import fs from 'fs-extra';
-import { ImageStyle, CLIOptions, AnkiDeck } from './types.js';
+import { ImageStyle, CLIOptions, TxtDeck } from './types.js';
 import { logger } from './utils/logger.js';
 import { ensureDir } from './utils/files.js';
-import { AnkiParser } from './anki/parser.js';
-import { AnkiWriter } from './anki/writer.js';
+import { TxtParser } from './anki/parser.js';
+import { TxtWriter } from './anki/writer.js';
 import { ImageGenerator } from './image/generator.js';
 
-export async function processAnkiDeck(
+export async function processTxtDeck(
   inputPath: string,
   outputPath: string,
   style: ImageStyle,
   options: CLIOptions
 ): Promise<void> {
-  const parser = new AnkiParser();
-  const writer = new AnkiWriter();
+  const parser = new TxtParser();
+  const writer = new TxtWriter();
   let imageGenerator: ImageGenerator;
 
   try {
     // Parse the deck
     logger.progress('Analyzing deck...');
-    const deck = await parser.parseApkg(inputPath);
+    const deck = await parser.parseTxt(inputPath);
     
     logger.success(`Found ${deck.cards.length} cards in "${deck.name}"`);
     
@@ -99,8 +99,7 @@ export async function processAnkiDeck(
     if (generatedImages.size > 0) {
       logger.progress('Creating enhanced deck...');
       
-      await writer.writeEnhancedApkg(
-        inputPath,
+      await writer.writeEnhancedTxt(
         deck,
         generatedImages,
         outputPath
@@ -121,14 +120,10 @@ export async function processAnkiDeck(
   } catch (error) {
     logger.error(`Processing failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
     throw error;
-  } finally {
-    // Cleanup
-    await parser.cleanup();
-    await writer.cleanup();
   }
 }
 
-function showDryRunSummary(deck: AnkiDeck, outputPath: string, style: ImageStyle): void {
+function showDryRunSummary(deck: TxtDeck, outputPath: string, style: ImageStyle): void {
   console.log(`
 📋 Dry Run Summary:
    Deck: "${deck.name}"

@@ -15,9 +15,12 @@ export class ImageGenerator {
   private client: AxiosInstance;
   private promptGenerator: PromptGenerator;
   private apiKey: string;
+  private isMockMode: boolean;
 
   constructor(apiKey: string, style: ImageStyle) {
     this.apiKey = apiKey;
+    this.isMockMode = apiKey === 'mock';
+    
     const config: GeminiConfig = {
       apiKey,
       baseUrl: 'https://generativelanguage.googleapis.com/v1beta',
@@ -33,6 +36,10 @@ export class ImageGenerator {
     });
 
     this.promptGenerator = new PromptGenerator(style);
+    
+    if (this.isMockMode) {
+      console.log('🧪 MOCK MODE ACTIVATED - No real API calls will be made');
+    }
   }
 
   async generateImage(
@@ -45,7 +52,21 @@ export class ImageGenerator {
       // Generate prompt
       const prompt = this.promptGenerator.generatePrompt(question, answer);
       
-      // Make API request
+      if (this.isMockMode) {
+        // Mock mode: create a placeholder image and simulate processing time
+        const imagePath = await this.createMockImage(cardId, question, outputDir);
+        
+        // Simulate processing time (shorter for testing)
+        await new Promise(resolve => setTimeout(resolve, 500));
+        
+        return {
+          cardId,
+          success: true,
+          imagePath
+        };
+      }
+      
+      // Make real API request
       const imageData = await this.requestImageGeneration(prompt);
       
       // Save image file
@@ -115,6 +136,24 @@ export class ImageGenerator {
       
       throw error;
     }
+  }
+
+  private async createMockImage(cardId: number, question: string, outputDir: string): Promise<string> {
+    await fs.ensureDir(outputDir);
+    
+    const fileName = `card-${cardId.toString().padStart(3, '0')}.png`;
+    const filePath = path.join(outputDir, fileName);
+    
+    // Create a simple mock PNG - this is just placeholder data
+    // In a real implementation, you might create an actual image with text
+    const mockImageData = Buffer.from(
+      'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==',
+      'base64'
+    );
+    
+    await fs.writeFile(filePath, mockImageData);
+    
+    return filePath;
   }
 
   private async saveImage(cardId: number, imageData: Buffer, outputDir: string): Promise<string> {

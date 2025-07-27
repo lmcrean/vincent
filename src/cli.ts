@@ -5,9 +5,9 @@ import chalk from 'chalk';
 import prompts from 'prompts';
 import { CLIOptions, ImageStyle } from './types.js';
 import { logger } from './utils/logger.js';
-import { validateApkgFile, generateOutputFilename } from './utils/files.js';
+import { validateTxtFile, generateOutputFilename } from './utils/files.js';
 import { ConfigManager } from './config.js';
-import { processAnkiDeck } from './index.js';
+import { processTxtDeck } from './index.js';
 
 const program = new Command();
 
@@ -63,7 +63,7 @@ async function runVincent(deckPath: string, options: CLIOptions): Promise<void> 
   }
 
   // Validate input file
-  validateApkgFile(deckPath);
+  validateTxtFile(deckPath);
 
   // Validate style option
   if (options.style && !['educational', 'medical', 'colorful', 'minimal'].includes(options.style)) {
@@ -103,7 +103,7 @@ async function runVincent(deckPath: string, options: CLIOptions): Promise<void> 
   }
 
   // Process the deck
-  await processAnkiDeck(deckPath, outputPath, style, options);
+  await processTxtDeck(deckPath, outputPath, style, options);
 }
 
 function showWelcomeHeader(): void {

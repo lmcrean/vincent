@@ -19,9 +19,9 @@ export async function fileExists(filePath: string): Promise<boolean> {
   }
 }
 
-export function validateApkgFile(filePath: string): void {
+export function validateTxtFile(filePath: string): void {
   if (!filePath.endsWith('.txt')) {
-    throw new FileError(`File '${filePath}' is not a valid Anki deck (.txt)`);
+    throw new FileError(`File '${filePath}' is not a valid text file (.txt)`);
   }
   
   if (!fs.existsSync(filePath)) {

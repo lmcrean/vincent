@@ -1,16 +1,12 @@
-export interface AnkiCard {
+export interface TxtCard {
   id: number;
-  nid: number;
   question: string;
   answer: string;
-  fields: string[];
-  tags: string[];
 }
 
-export interface AnkiDeck {
+export interface TxtDeck {
   name: string;
-  cards: AnkiCard[];
-  mediaFiles: Map<string, Buffer>;
+  cards: TxtCard[];
 }
 
 export interface ImageRequest {
