@@ -66,8 +66,8 @@ async function runVincent(deckPath: string, options: CLIOptions): Promise<void> 
   validateApkgFile(deckPath);
 
   // Validate style option
-  if (options.style && !['educational', 'medical', 'colorful'].includes(options.style)) {
-    logger.error(`Invalid style '${options.style}'. Valid styles are: educational, medical, colorful`);
+  if (options.style && !['educational', 'medical', 'colorful', 'minimal'].includes(options.style)) {
+    logger.error(`Invalid style '${options.style}'. Valid styles are: educational, medical, colorful, minimal`);
     process.exit(1);
   }
 
@@ -163,7 +163,7 @@ async function setupApiKey(isInteractive: boolean = true): Promise<void> {
 
 async function getStylePreference(defaultStyle?: ImageStyle, isInteractive: boolean = true): Promise<ImageStyle> {
   // If a valid style is provided, use it regardless of interactive mode
-  if (defaultStyle && ['educational', 'medical', 'colorful'].includes(defaultStyle)) {
+  if (defaultStyle && ['educational', 'medical', 'colorful', 'minimal'].includes(defaultStyle)) {
     return defaultStyle;
   }
 
@@ -178,7 +178,8 @@ async function getStylePreference(defaultStyle?: ImageStyle, isInteractive: bool
     choices: [
       { title: 'Educational - Clean diagrams and labels', value: 'educational' },
       { title: 'Medical - Anatomical, professional style', value: 'medical' },
-      { title: 'Colorful - Memorable and engaging visuals', value: 'colorful' }
+      { title: 'Colorful - Memorable and engaging visuals', value: 'colorful' },
+      { title: 'Minimal - Simple, clean icons', value: 'minimal' }
     ],
     initial: 0
   });

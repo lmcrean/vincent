@@ -28,11 +28,11 @@ export interface GenerationResult {
 
 export interface Config {
   apiKey: string;
-  style: 'educational' | 'medical' | 'colorful';
+  style: 'educational' | 'medical' | 'colorful' | 'minimal';
   outputDir: string;
 }
 
-export type ImageStyle = 'educational' | 'medical' | 'colorful';
+export type ImageStyle = 'educational' | 'medical' | 'colorful' | 'minimal';
 
 export interface CLIOptions {
   output?: string;
