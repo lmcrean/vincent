@@ -65,6 +65,12 @@ async function runVincent(deckPath: string, options: CLIOptions): Promise<void> 
   // Validate input file
   validateApkgFile(deckPath);
 
+  // Validate style option
+  if (options.style && !['educational', 'medical', 'colorful'].includes(options.style)) {
+    logger.error(`Invalid style '${options.style}'. Valid styles are: educational, medical, colorful`);
+    process.exit(1);
+  }
+
   // Validate concurrency option
   if (options.concurrency !== undefined) {
     const concurrency = Number(options.concurrency);

@@ -87,7 +87,7 @@ describe('CLI Integration Tests', () => {
     });
 
     it('should handle --style option correctly', async () => {
-      const styles = ['educational', 'medical', 'colorful', 'minimal'];
+      const styles = ['educational', 'medical', 'colorful'];
 
       for (const style of styles) {
         const { stdout, stderr, exitCode } = await runCLI([
@@ -109,7 +109,7 @@ describe('CLI Integration Tests', () => {
       ]);
 
       expect(exitCode).not.toBe(0);
-      expect(stderr).toContain('invalid choice');
+      expect(stderr).toContain('Invalid style');
     });
 
     it('should handle --concurrency option correctly', async () => {
@@ -204,11 +204,12 @@ describe('CLI Integration Tests', () => {
         '--dry-run'
       ], { timeout: 5000 });
 
-      // Should either succeed with prompt or fail with clear message
+      // In non-interactive mode, should either fail gracefully or succeed with test API key
       if (exitCode !== 0) {
         expect(stderr).toContain('API key');
       } else {
-        expect(stdout).toContain('API key');
+        // Should succeed and process the deck (dry run mode)
+        expect(stdout).toContain('Analyzing deck');
       }
     });
 
