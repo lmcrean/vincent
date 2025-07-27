@@ -40,10 +40,15 @@ describe('ensureDir', () => {
   });
 
   it('should throw FileError on permission error', async () => {
+    // Mock fs.ensureDir to throw an error
+    const mockEnsureDir = vi.spyOn(fs, 'ensureDir').mockRejectedValue(new Error('Permission denied'));
+    
     const invalidPath = '/invalid/permission/path';
     
     await expect(ensureDir(invalidPath)).rejects.toThrow(FileError);
     await expect(ensureDir(invalidPath)).rejects.toThrow('Failed to create directory');
+    
+    mockEnsureDir.mockRestore();
   });
 });
 
@@ -133,14 +138,14 @@ describe('generateOutputFilename', () => {
     const inputPath = '/path/to/my-deck.apkg';
     const result = generateOutputFilename(inputPath);
     
-    expect(result).toBe('/path/to/my-deck-illustrated.apkg');
+    expect(result).toBe(path.join('/path/to', 'my-deck-illustrated.apkg'));
   });
 
   it('should generate output filename with custom suffix', () => {
     const inputPath = '/path/to/my-deck.apkg';
     const result = generateOutputFilename(inputPath, 'enhanced');
     
-    expect(result).toBe('/path/to/my-deck-enhanced.apkg');
+    expect(result).toBe(path.join('/path/to', 'my-deck-enhanced.apkg'));
   });
 
   it('should handle windows paths', () => {
@@ -154,14 +159,14 @@ describe('generateOutputFilename', () => {
     const inputPath = '/path/to/my.test.deck.apkg';
     const result = generateOutputFilename(inputPath);
     
-    expect(result).toBe('/path/to/my.test.deck-illustrated.apkg');
+    expect(result).toBe(path.join('/path/to', 'my.test.deck-illustrated.apkg'));
   });
 
   it('should handle relative paths', () => {
     const inputPath = './my-deck.apkg';
     const result = generateOutputFilename(inputPath);
     
-    expect(result).toBe('./my-deck-illustrated.apkg');
+    expect(result).toBe(path.join('.', 'my-deck-illustrated.apkg'));
   });
 });
 
@@ -192,6 +197,8 @@ describe('createTempDir', () => {
 
   it('should create unique directory names', async () => {
     const tempDir1 = await createTempDir();
+    // Add a small delay to ensure different timestamps
+    await new Promise(resolve => setTimeout(resolve, 1));
     const tempDir2 = await createTempDir();
     
     createdDirs.push(tempDir1, tempDir2);

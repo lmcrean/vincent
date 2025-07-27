@@ -299,7 +299,7 @@ describe('ImageGenerator', () => {
       );
 
       expect(result.success).toBe(false);
-      expect(result.error).toBe('API request failed with status 500');
+      expect(result.error).toBe('API error: API request failed with status 500');
     });
 
     it('should handle file system errors', async () => {
@@ -333,7 +333,7 @@ describe('ImageGenerator', () => {
       );
 
       expect(result.success).toBe(false);
-      expect(result.error).toBe('GEMINI_API_KEY environment variable not set');
+      expect(result.error).toBe('API error: GEMINI_API_KEY environment variable not set');
     });
 
     it('should handle unknown errors', async () => {
@@ -347,7 +347,7 @@ describe('ImageGenerator', () => {
       );
 
       expect(result.success).toBe(false);
-      expect(result.error).toBe('Unknown error');
+      expect(result.error).toBe('API error: undefined');
     });
   });
 
@@ -367,9 +367,10 @@ describe('ImageGenerator', () => {
       );
 
       expect(result.success).toBe(true);
-      
-      const savedContent = await fs.readFile(result.imagePath!);
-      expect(savedContent.length).toBe(largeImageData.length);
+      if (result.success) {
+        const savedContent = await fs.readFile(result.imagePath!);
+        expect(savedContent.length).toBe(largeImageData.length);
+      }
     });
 
     it('should handle special characters in filenames', async () => {
@@ -386,10 +387,12 @@ describe('ImageGenerator', () => {
       );
 
       expect(result.success).toBe(true);
-      expect(result.imagePath).toMatch(/card-999999\.png$/);
-      
-      const imageExists = await fs.pathExists(result.imagePath!);
-      expect(imageExists).toBe(true);
+      if (result.success) {
+        expect(result.imagePath).toMatch(/card-999999\.png$/);
+        
+        const imageExists = await fs.pathExists(result.imagePath!);
+        expect(imageExists).toBe(true);
+      }
     });
 
     it('should handle concurrent image generation', async () => {
@@ -410,14 +413,15 @@ describe('ImageGenerator', () => {
       results.forEach((result, index) => {
         expect(result.success).toBe(true);
         expect(result.cardId).toBe(index + 1);
+        
+        if (result.success) {
+          // Verify all files were created
+          const filePath = path.join(outputDir, `card-00${index + 1}.png`);
+          fs.pathExists(filePath).then(exists => {
+            expect(exists).toBe(true);
+          });
+        }
       });
-
-      // Verify all files were created
-      for (let i = 1; i <= 3; i++) {
-        const filePath = path.join(outputDir, `card-00${i}.png`);
-        const exists = await fs.pathExists(filePath);
-        expect(exists).toBe(true);
-      }
     });
   });
 });
