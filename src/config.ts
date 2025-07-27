@@ -6,7 +6,9 @@ import { ConfigError } from './utils/errors.js';
 
 export class ConfigManager {
   private get configDir(): string {
-    return path.join(os.homedir(), '.vincent');
+    // Allow test override via environment variable
+    const homeDir = process.env.VINCENT_TEST_HOME_DIR || os.homedir();
+    return path.join(homeDir, '.vincent');
   }
 
   private get configFile(): string {

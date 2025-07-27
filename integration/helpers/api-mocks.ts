@@ -10,48 +10,14 @@ const GEMINI_BASE_URL = 'https://generativelanguage.googleapis.com/v1beta';
 
 // API handlers for MSW
 export const apiHandlers = [
-  // Successful image generation
+  // Successful image generation - Default handler
   http.post(`${GEMINI_BASE_URL}/models/gemini-2.0-flash-preview-image-generation:generateContent`, async ({ request }) => {
-    const body = await request.json() as any;
-    
-    // Simulate processing delay
-    await new Promise(resolve => setTimeout(resolve, 100));
-    
-    // Return mock PNG data
-    const mockImageBuffer = await fs.readFile(path.join(RESPONSES_DIR, 'sample-generated-image.png'));
-    
-    return HttpResponse.json({
-      candidates: [{
-        content: {
-          parts: [{
-            inlineData: {
-              mimeType: 'image/png',
-              data: mockImageBuffer.toString('base64')
-            }
-          }]
-        }
-      }]
-    });
-  }),
-
-  // Rate limit error (429)
-  http.post(`${GEMINI_BASE_URL}/models/gemini-2.0-flash-preview-image-generation:generateContent`, ({ request }) => {
     const url = new URL(request.url);
-    if (url.searchParams.get('simulate') === 'rate_limit') {
-      return new HttpResponse(null, {
-        status: 429,
-        statusText: 'Too Many Requests',
-        headers: {
-          'Retry-After': '60'
-        }
-      });
-    }
-  }),
-
-  // Authentication error (401)
-  http.post(`${GEMINI_BASE_URL}/models/gemini-2.0-flash-preview-image-generation:generateContent`, ({ request }) => {
-    const url = new URL(request.url);
-    if (url.searchParams.get('simulate') === 'auth_error') {
+    const apiKey = url.searchParams.get('key');
+    const simulate = url.searchParams.get('simulate');
+    
+    // Check for simulation parameters first
+    if (simulate === 'auth_error' || apiKey === 'invalid-key') {
       return HttpResponse.json({
         error: {
           code: 401,
@@ -60,27 +26,55 @@ export const apiHandlers = [
         }
       }, { status: 401 });
     }
-  }),
-
-  // Server error (500)
-  http.post(`${GEMINI_BASE_URL}/models/gemini-2.0-flash-preview-image-generation:generateContent`, ({ request }) => {
-    const url = new URL(request.url);
-    if (url.searchParams.get('simulate') === 'server_error') {
+    
+    if (simulate === 'rate_limit') {
+      return new HttpResponse(null, {
+        status: 429,
+        statusText: 'Too Many Requests',
+        headers: {
+          'Retry-After': '60'
+        }
+      });
+    }
+    
+    if (simulate === 'server_error') {
       return new HttpResponse(null, {
         status: 500,
         statusText: 'Internal Server Error'
       });
     }
-  }),
-
-  // Network timeout simulation
-  http.post(`${GEMINI_BASE_URL}/models/gemini-2.0-flash-preview-image-generation:generateContent`, async ({ request }) => {
-    const url = new URL(request.url);
-    if (url.searchParams.get('simulate') === 'timeout') {
+    
+    if (simulate === 'timeout') {
       // Simulate long delay that will cause timeout
       await new Promise(resolve => setTimeout(resolve, 35000));
       return HttpResponse.json({ success: true });
     }
+    
+    if (simulate === 'malformed') {
+      return HttpResponse.json({
+        invalid: 'response structure'
+      });
+    }
+    
+    // Default successful response
+    // Simulate processing delay
+    await new Promise(resolve => setTimeout(resolve, 100));
+    
+    // Return mock PNG data as arraybuffer (since responseType is 'arraybuffer')
+    const mockImageBuffer = await fs.readFile(path.join(RESPONSES_DIR, 'sample-generated-image.png'));
+    
+    return new HttpResponse(mockImageBuffer, {
+      status: 200,
+      headers: {
+        'Content-Type': 'image/png'
+      }
+    });
+  }),
+
+  // Additional catch-all handler for any uncaught requests
+  http.all('*', ({ request }) => {
+    console.error('Unhandled request:', request.method, request.url);
+    return HttpResponse.json({ error: 'Not mocked' }, { status: 500 });
   })
 ];
 

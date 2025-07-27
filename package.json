@@ -20,6 +20,8 @@
     "watch": "tsc -w",
     "test": "vitest run",
     "test:watch": "vitest",
+    "test:integration": "vitest run --config vitest.integration.config.ts",
+    "test:all": "npm test && npm run test:integration",
     "test:coverage": "vitest run --coverage",
     "test:ui": "vitest --ui",
     "lint": "eslint src/**/*.ts",
