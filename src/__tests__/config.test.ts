@@ -5,7 +5,7 @@ import { tmpdir } from 'os';
 import { ConfigManager } from '../config.js';
 import { ConfigError } from '../utils/errors.js';
 
-// Mock os module - move mock function inside mock factory
+// Mock os module
 vi.mock('os', async () => {
   const actual = await vi.importActual('os');
   return {
@@ -19,19 +19,22 @@ describe('ConfigManager', () => {
   let tempHomeDir: string;
 
   beforeEach(async () => {
-    // Create a temporary directory to act as home directory
-    tempHomeDir = path.join(tmpdir(), 'vincent-config-test-' + Date.now());
+    // Create a unique temporary directory for each test
+    tempHomeDir = path.join(tmpdir(), 'vincent-config-test-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9));
     await fs.ensureDir(tempHomeDir);
 
-    // Mock os.homedir to return our temp directory
+    // Get the mocked os module and set up homedir mock
     const os = await import('os');
-    vi.mocked(os.homedir).mockReturnValue(tempHomeDir);
+    const mockHomedir = vi.mocked(os.homedir);
+    mockHomedir.mockClear();
+    mockHomedir.mockReturnValue(tempHomeDir);
 
+    // Create a new instance after setting up the mock
     configManager = new ConfigManager();
   });
 
   afterEach(async () => {
-    // Clean up temp directory
+    // Clean up temp directory completely
     try {
       await fs.remove(tempHomeDir);
     } catch {
