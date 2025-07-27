@@ -255,11 +255,16 @@ export async function validateApkgContent(apkgPath: string, expectedCards: TestA
     
     // Open database
     const dbPath = path.join(tempDir.path, 'collection.anki2');
+    if (!await fs.pathExists(dbPath)) {
+      return false;
+    }
+    
     const db = new Database(dbPath);
     
     // Check cards count
     const cardCount = db.prepare('SELECT COUNT(*) as count FROM cards').get() as { count: number };
     if (cardCount.count !== expectedCards.length) {
+      db.close();
       return false;
     }
     
@@ -271,7 +276,11 @@ export async function validateApkgContent(apkgPath: string, expectedCards: TestA
       const fields = note.flds.split('\x1f');
       const expectedCard = expectedCards[i];
       
-      if (fields[0] !== expectedCard.question || fields[1] !== expectedCard.answer) {
+      // Vincent adds images to the answer field, so we need to check if the original content is still there
+      const answerContainsExpected = fields[1].includes(expectedCard.answer);
+      
+      if (fields[0] !== expectedCard.question || !answerContainsExpected) {
+        db.close();
         return false;
       }
     }

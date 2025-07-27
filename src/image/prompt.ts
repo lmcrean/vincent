@@ -21,6 +21,11 @@ const STYLE_TEMPLATES: Record<ImageStyle, StyleTemplate> = {
     vocabulary: "Create a vibrant, memorable illustration for {question} showing {answer}. Style: colorful, engaging, fun, easy to remember.",
     concept: "Generate a colorful, engaging visual for {question} demonstrating {answer}. Style: bright colors, memorable design, visually appealing.",
     default: "Create a colorful, memorable illustration for {question} and {answer}. Style: vibrant, engaging, fun, visually striking."
+  },
+  minimal: {
+    vocabulary: "Create a simple, minimalist icon representing {question} and {answer}. Style: clean lines, essential elements only, minimal text.",
+    concept: "Generate a minimal diagram for {question} showing {answer}. Style: simple shapes, clean design, no unnecessary details.",
+    default: "Create a minimalist illustration for {question} and {answer}. Style: simple, clean, essential elements only."
   }
 };
 
