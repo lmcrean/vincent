@@ -1,0 +1,15 @@
+What is JavaScript?;A high-level, interpreted programming language that conforms to the ECMAScript specification
+What is TypeScript?;A programming language developed by Microsoft that builds on JavaScript by adding static type definitions
+What is Node.js?;A JavaScript runtime built on Chrome's V8 JavaScript engine that allows JavaScript to run server-side
+What is React?;A JavaScript library for building user interfaces, maintained by Facebook and the community
+What is Vue.js?;A progressive framework for building user interfaces, designed to be incrementally adoptable
+What is Angular?;A platform and framework for building single-page client applications using HTML and TypeScript
+What is Express.js?;A fast, unopinionated, minimalist web framework for Node.js
+What is MongoDB?;A document-oriented NoSQL database program that uses JSON-like documents with optional schemas
+What is PostgreSQL?;An open-source relational database management system emphasizing extensibility and SQL compliance
+What is Redis?;An open-source, in-memory data structure store used as a database, cache, and message broker
+What is Docker?;A platform that uses OS-level virtualization to deliver software in packages called containers
+What is Kubernetes?;An open-source container orchestration platform for automating deployment, scaling, and management
+What is Git?;A distributed version control system for tracking changes in source code during software development
+What is CI/CD?;Continuous Integration and Continuous Deployment - practices that enable frequent code integration and deployment
+What is DevOps?;A set of practices that combines software development and IT operations to shorten development lifecycle
