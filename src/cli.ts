@@ -65,6 +65,16 @@ async function runVincent(deckPath: string, options: CLIOptions): Promise<void> 
   // Validate input file
   validateApkgFile(deckPath);
 
+  // Validate concurrency option
+  if (options.concurrency !== undefined) {
+    const concurrency = Number(options.concurrency);
+    if (isNaN(concurrency) || concurrency < 1 || concurrency > 10) {
+      logger.error('Concurrency must be between 1 and 10');
+      process.exit(1);
+    }
+    options.concurrency = concurrency;
+  }
+
   // Setup API key if needed
   await setupApiKey(isInteractive);
 

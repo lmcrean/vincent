@@ -59,7 +59,7 @@ describe('CLI Integration Tests', () => {
       const { stdout, stderr, exitCode } = await runCLI([nonExistentFile]);
 
       expect(exitCode).not.toBe(0);
-      expect(stderr).toContain('does not exist');
+      expect(stderr).toContain('Could not find file');
     });
 
     it('should show error for invalid file extension', async () => {
@@ -69,7 +69,7 @@ describe('CLI Integration Tests', () => {
       const { stdout, stderr, exitCode } = await runCLI([invalidFile]);
 
       expect(exitCode).not.toBe(0);
-      expect(stderr).toContain('must be an .apkg file');
+      expect(stderr).toContain('not a valid Anki deck (.apkg)');
     });
   });
 
@@ -281,7 +281,7 @@ describe('CLI Integration Tests', () => {
       const { stdout, stderr, exitCode } = await runCLI([corruptedFile]);
 
       expect(exitCode).not.toBe(0);
-      expect(stderr).toContain('invalid');
+      expect(stderr).toContain('Failed to parse .apkg file');
       expect(stderr).toContain('.apkg');
     });
 
