@@ -18,6 +18,7 @@ program
   .argument('[deck]', 'Path to .apkg file')
   .option('-o, --output <path>', 'Output file path')
   .option('-s, --style <style>', 'Image style (educational, medical, colorful)', 'educational')
+  .option('-c, --concurrency <number>', 'Number of concurrent image generations (1-10)', '3')
   .option('--dry-run', 'Show what would be done without generating images')
   .option('-v, --verbose', 'Verbose output')
   .action(async (deckPath: string, options: CLIOptions) => {
@@ -30,46 +31,59 @@ program
   });
 
 async function runVincent(deckPath: string, options: CLIOptions): Promise<void> {
-  // Show welcome header
-  showWelcomeHeader();
+  // Check if running in non-interactive mode (tests, CI, or non-TTY)
+  const isInteractive = process.stdin.isTTY && process.env.NODE_ENV !== 'test';
+
+  // Show welcome header only in interactive mode
+  if (isInteractive) {
+    showWelcomeHeader();
+  }
 
   // Get deck path if not provided
   if (!deckPath) {
-    const response = await prompts({
-      type: 'text',
-      name: 'deckPath',
-      message: 'Enter path to your .apkg file:',
-      validate: (value: string) => value.trim() ? true : 'Please provide a file path'
-    });
-    
-    if (!response.deckPath) {
-      logger.error('No deck file specified');
+    if (isInteractive) {
+      const response = await prompts({
+        type: 'text',
+        name: 'deckPath',
+        message: 'Enter path to your .apkg file:',
+        validate: (value: string) => value.trim() ? true : 'Please provide a file path'
+      });
+      
+      if (!response.deckPath) {
+        logger.error('No deck file specified');
+        process.exit(1);
+      }
+      
+      deckPath = response.deckPath.trim();
+    } else {
+      // In non-interactive mode, require deck path as argument
+      logger.error('error: required argument \'deck\' not provided');
       process.exit(1);
     }
-    
-    deckPath = response.deckPath.trim();
   }
 
   // Validate input file
   validateApkgFile(deckPath);
 
   // Setup API key if needed
-  await setupApiKey();
+  await setupApiKey(isInteractive);
 
   // Get style preference
-  const style = await getStylePreference(options.style as ImageStyle);
+  const style = await getStylePreference(options.style as ImageStyle, isInteractive);
 
   // Determine output path
   const outputPath = options.output || generateOutputFilename(deckPath);
 
   // Show configuration summary
-  await showConfigurationSummary(deckPath, outputPath, style);
+  if (isInteractive) {
+    await showConfigurationSummary(deckPath, outputPath, style);
 
-  // Confirm processing
-  const shouldProceed = await confirmProcessing();
-  if (!shouldProceed) {
-    logger.info('Operation cancelled');
-    return;
+    // Confirm processing
+    const shouldProceed = await confirmProcessing();
+    if (!shouldProceed) {
+      logger.info('Operation cancelled');
+      return;
+    }
   }
 
   // Process the deck
@@ -84,32 +98,45 @@ Transform your flashcards with AI-generated educational images!
 `));
 }
 
-async function setupApiKey(): Promise<void> {
+async function setupApiKey(isInteractive: boolean = true): Promise<void> {
   const configManager = new ConfigManager();
   let apiKey: string | null = await configManager.getApiKey();
 
+  // Check environment variable first
   if (!apiKey) {
-    logger.info('First-time setup required');
-    console.log(chalk.cyan(`
+    apiKey = process.env.GEMINI_API_KEY || null;
+  }
+
+  if (!apiKey) {
+    if (isInteractive) {
+      logger.info('First-time setup required');
+      console.log(chalk.cyan(`
 📝 Gemini API Setup:
    Get your free API key at: https://makersuite.google.com/app/apikey
 `));
 
-    const response = await prompts({
-      type: 'password',
-      name: 'apiKey',
-      message: 'Enter your Gemini API key:',
-      validate: (value: string) => value.trim() ? true : 'API key is required'
-    });
+      const response = await prompts({
+        type: 'password',
+        name: 'apiKey',
+        message: 'Enter your Gemini API key:',
+        validate: (value: string) => value.trim() ? true : 'API key is required'
+      });
 
-    if (!response.apiKey) {
-      throw new Error('API key is required');
+      if (!response.apiKey) {
+        throw new Error('API key is required');
+      }
+
+      const newApiKey = response.apiKey.trim();
+      await configManager.saveApiKey(newApiKey);
+      apiKey = newApiKey;
+      logger.success('API key saved');
+    } else {
+      // In non-interactive mode, API key must be provided via environment variable
+      if (!process.env.GEMINI_API_KEY) {
+        throw new Error('GEMINI_API_KEY environment variable is required in non-interactive mode');
+      }
+      apiKey = process.env.GEMINI_API_KEY;
     }
-
-    const newApiKey = response.apiKey.trim();
-    await configManager.saveApiKey(newApiKey);
-    apiKey = newApiKey;
-    logger.success('API key saved');
   }
 
   // Set environment variable for this session
@@ -118,9 +145,14 @@ async function setupApiKey(): Promise<void> {
   }
 }
 
-async function getStylePreference(defaultStyle?: ImageStyle): Promise<ImageStyle> {
+async function getStylePreference(defaultStyle?: ImageStyle, isInteractive: boolean = true): Promise<ImageStyle> {
+  // If a valid style is provided, use it regardless of interactive mode
   if (defaultStyle && ['educational', 'medical', 'colorful'].includes(defaultStyle)) {
     return defaultStyle;
+  }
+
+  if (!isInteractive) {
+    return 'educational'; // Default style in non-interactive mode
   }
 
   const response = await prompts({

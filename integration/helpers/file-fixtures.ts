@@ -84,11 +84,12 @@ export async function createTestApkg(options: CreateApkgOptions): Promise<string
   
   // Insert collection data
   const now = Date.now();
-  const deckId = 1;
+  const deckId = 2;
   const modelId = 1;
   
   const decks = {
-    [deckId]: {
+    '1': { name: 'Default' },
+    '2': { 
       id: deckId,
       name: options.deckName,
       extendNew: 20,
@@ -172,16 +173,24 @@ export async function createTestApkg(options: CreateApkgOptions): Promise<string
   
   db.close();
   
-  // Create media file if provided
+  // Create media files if provided
   let mediaContent = '{}';
+  const mediaDir = path.join(tempDir.path, 'collection.media');
+  
   if (options.mediaFiles && options.mediaFiles.size > 0) {
     const mediaMap: Record<string, string> = {};
     let mediaIndex = 0;
     
+    // Create collection.media directory
+    await fs.ensureDir(mediaDir);
+    
     for (const [filename, buffer] of options.mediaFiles) {
       const mediaFilename = `${mediaIndex}`;
       mediaMap[mediaFilename] = filename;
+      
+      // Write to both the temp directory root (for zip) and collection.media (for extraction)
       await fs.writeFile(path.join(tempDir.path, mediaFilename), buffer);
+      await fs.writeFile(path.join(mediaDir, filename), buffer);
       mediaIndex++;
     }
     
@@ -201,6 +210,13 @@ export async function createTestApkg(options: CreateApkgOptions): Promise<string
     for (const [_, buffer] of options.mediaFiles) {
       zip.addFile(`${mediaIndex}`, buffer);
       mediaIndex++;
+    }
+  }
+  
+  // Also add the collection.media directory to the zip
+  if (options.mediaFiles && options.mediaFiles.size > 0) {
+    for (const [filename, buffer] of options.mediaFiles) {
+      zip.addFile(`collection.media/${filename}`, buffer);
     }
   }
   

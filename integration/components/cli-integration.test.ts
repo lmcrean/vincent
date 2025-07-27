@@ -334,8 +334,8 @@ async function runCLI(args: string[], options: { timeout?: number } = {}): Promi
   return new Promise((resolve, reject) => {
     const timeout = options.timeout || 10000;
     
-    // Build path to CLI script
-    const cliPath = path.resolve(__dirname, '../../dist/cli.js');
+    // Build path to CLI script - relative to the integration test directory
+    const cliPath = path.resolve(process.cwd(), '..', 'dist', 'cli.js');
     
     const child = spawn('node', [cliPath, ...args], {
       stdio: ['pipe', 'pipe', 'pipe'],

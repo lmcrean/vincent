@@ -39,4 +39,5 @@ export interface CLIOptions {
   style?: ImageStyle;
   dryRun?: boolean;
   verbose?: boolean;
+  concurrency?: number;
 }

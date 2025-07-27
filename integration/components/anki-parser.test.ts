@@ -61,9 +61,9 @@ describe('AnkiParser Integration Tests', () => {
       expect(deck.cards).toHaveLength(2);
       
       const firstCard = deck.cards[0];
-      expect(firstCard.question).toContain('<b>');
-      expect(firstCard.question).toContain('<i>photosynthesis</i>');
-      expect(firstCard.answer).toContain('<span style="color: green;">plants</span>');
+      // HTML should be stripped by the parser
+      expect(firstCard.question).toBe('What is photosynthesis?');
+      expect(firstCard.answer).toBe('The process by which plants convert light energy into chemical energy.');
     });
 
     it('should handle deck with existing media files', async () => {
@@ -82,7 +82,7 @@ describe('AnkiParser Integration Tests', () => {
 
       expect(deck.cards).toHaveLength(1);
       expect(deck.mediaFiles).toBeDefined();
-      expect(Object.keys(deck.mediaFiles)).toHaveLength(2);
+      expect(deck.mediaFiles.size).toBe(2);
     });
 
     it('should handle edge case content', async () => {
