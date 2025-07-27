@@ -352,6 +352,22 @@ describe('ImageGenerator', () => {
   });
 
   describe('integration scenarios', () => {
+    beforeEach(() => {
+      // Ensure API key is set for integration scenarios
+      process.env.GEMINI_API_KEY = 'test-api-key-123';
+      // Reset all mocks to ensure clean state
+      vi.clearAllMocks();
+      // Re-setup axios mock
+      mockAxios.post.mockResolvedValue({
+        status: 200,
+        data: Buffer.from('mock-image-data')
+      });
+      // Reset fs.writeFile to use actual implementation for these tests
+      vi.mocked(fs.writeFile).mockImplementation(async (file, data) => {
+        return fs.promises.writeFile(file, data);
+      });
+    });
+
     it('should handle large image data', async () => {
       const largeImageData = Buffer.alloc(1024 * 1024); // 1MB of zeros
       mockAxios.post.mockResolvedValue({
