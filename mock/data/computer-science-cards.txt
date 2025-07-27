@@ -1,0 +1,26 @@
+What is a binary tree?;A tree data structure where each node has at most two children
+Define recursion;A function that calls itself to solve smaller subproblems
+What is Big O notation?;Mathematical notation describing algorithm efficiency
+What is a hash table?;Data structure using key-value pairs for fast lookups
+What is a linked list?;A linear data structure where elements point to the next element
+Define a stack;Last-in-first-out data structure with push and pop operations
+What is a queue?;First-in-first-out data structure with enqueue and dequeue operations
+What is a binary search?;Efficient search algorithm that divides sorted data in half each iteration
+Explain polymorphism;Ability of objects to take multiple forms in OOP
+Define encapsulation;The practice of hiding internal object details from external access
+What is inheritance?;Mechanism allowing classes to inherit properties from parent classes
+Define abstraction;Hiding complex implementation details while showing essential features
+What is method overriding?;Redefining parent class methods in child classes
+Explain class vs object;Class is a blueprint, object is an instance of that blueprint
+What is a variable?;Named storage location that holds data values
+Define a function;Reusable block of code that performs a specific task
+What is a loop?;Control structure that repeats code until a condition is met
+Explain conditional statements;Code that executes different paths based on boolean conditions
+What is an array?;Collection of elements stored in contiguous memory locations
+Define a pointer;Variable that stores the memory address of another variable
+What is RAM?;Random Access Memory used for temporary data storage
+Define CPU;Central Processing Unit that executes program instructions
+What is an operating system?;Software that manages computer hardware and software resources
+Explain compilation;Process of translating source code into machine executable code
+What is a database?;Organized collection of structured information stored electronically
+Define network protocol;Set of rules governing communication between network devices
