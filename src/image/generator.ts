@@ -14,8 +14,10 @@ interface GeminiConfig {
 export class ImageGenerator {
   private client: AxiosInstance;
   private promptGenerator: PromptGenerator;
+  private apiKey: string;
 
   constructor(apiKey: string, style: ImageStyle) {
+    this.apiKey = apiKey;
     const config: GeminiConfig = {
       apiKey,
       baseUrl: 'https://generativelanguage.googleapis.com/v1beta',
@@ -127,9 +129,10 @@ export class ImageGenerator {
   }
 
   private getApiKey(): string {
-    const apiKey = process.env.GEMINI_API_KEY;
+    // Use the API key passed to constructor, fall back to env var
+    const apiKey = this.apiKey || process.env.GEMINI_API_KEY;
     if (!apiKey) {
-      throw new APIError('GEMINI_API_KEY environment variable not set');
+      throw new APIError('No API key provided');
     }
     return apiKey;
   }
