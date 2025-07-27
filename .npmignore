@@ -1,0 +1,27 @@
+# Source files (publish dist only)
+src/
+tests/
+build/
+
+# Development files
+tsconfig.json
+jest.config.js
+.eslintrc.js
+
+# Documentation (keep README.md)
+docs/
+
+# Git files
+.gitignore
+.git/
+
+# Environment
+.env
+.env.local
+
+# IDE
+.vscode/
+.idea/
+
+# Logs
+*.log

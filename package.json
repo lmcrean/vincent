@@ -1,0 +1,56 @@
+{
+  "name": "vincent-anki",
+  "version": "1.0.0",
+  "description": "AI image generator for Anki flashcards using Gemini API",
+  "keywords": ["anki", "flashcards", "ai", "images", "gemini", "education"],
+  "bin": {
+    "vincent": "./dist/cli.js"
+  },
+  "files": [
+    "dist/**/*",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "scripts": {
+    "build": "tsc && node build/add-shebang.js",
+    "dev": "tsx src/cli.ts",
+    "watch": "tsc -w",
+    "test": "jest",
+    "lint": "eslint src/**/*.ts",
+    "prepublishOnly": "npm run build && npm test",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "commander": "^11.0.0",
+    "chalk": "^4.1.2",
+    "prompts": "^2.4.2",
+    "adm-zip": "^0.5.10",
+    "better-sqlite3": "^9.0.0",
+    "axios": "^1.6.0",
+    "fs-extra": "^11.2.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@types/adm-zip": "^0.5.0",
+    "@types/better-sqlite3": "^7.6.0",
+    "@types/fs-extra": "^11.0.0",
+    "@types/prompts": "^2.4.0",
+    "typescript": "^5.0.0",
+    "tsx": "^4.0.0",
+    "jest": "^29.0.0",
+    "@types/jest": "^29.0.0",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "eslint": "^8.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/vincent-anki.git"
+  },
+  "author": "Your Name",
+  "license": "MIT",
+  "homepage": "https://github.com/yourusername/vincent-anki#readme"
+}
