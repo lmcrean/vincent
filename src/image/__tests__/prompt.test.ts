@@ -52,10 +52,10 @@ describe('PromptGenerator', () => {
           'Biology answer'
         );
 
-        expect(prompt).toContain('educational illustration for this flashcard');
+        expect(prompt).toContain('Create a clear educational illustration');
         expect(prompt).toContain('Biology question');
         expect(prompt).toContain('Biology answer');
-        expect(prompt).toContain('clean, informative, study-friendly');
+        expect(prompt).toContain('clean, minimal text, suitable for memorization');
       });
     });
 
@@ -91,10 +91,10 @@ describe('PromptGenerator', () => {
           'Medical definition'
         );
 
-        expect(prompt).toContain('medical illustration');
+        expect(prompt).toContain('detailed medical illustration');
         expect(prompt).toContain('Medical term');
         expect(prompt).toContain('Medical definition');
-        expect(prompt).toContain('professional, clinical, anatomically accurate');
+        expect(prompt).toContain('anatomical accuracy, medical textbook quality, professional');
       });
     });
 
@@ -130,10 +130,10 @@ describe('PromptGenerator', () => {
           'Fun answer'
         );
 
-        expect(prompt).toContain('colorful, memorable illustration');
+        expect(prompt).toContain('vibrant, memorable illustration');
         expect(prompt).toContain('Fun question');
         expect(prompt).toContain('Fun answer');
-        expect(prompt).toContain('vibrant, engaging, fun, visually striking');
+        expect(prompt).toContain('colorful, engaging, fun, easy to remember');
       });
     });
   });
