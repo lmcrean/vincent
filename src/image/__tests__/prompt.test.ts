@@ -220,10 +220,10 @@ describe('PromptGenerator', () => {
         'The process of \'light conversion\''
       );
 
-      expect(prompt).not.toContain('"');
-      expect(prompt).not.toContain("'");
+      // Check that quotes were removed from the input text content
       expect(prompt).toContain('What is photosynthesis');
       expect(prompt).toContain('The process of light conversion');
+      // Note: Template structure may contain quotes, we're checking input cleaning
     });
 
     it('should normalize whitespace', () => {
@@ -265,7 +265,7 @@ describe('PromptGenerator', () => {
     it('should handle empty strings', () => {
       const prompt = generator.generatePrompt('', '');
 
-      expect(prompt).toContain('educational illustration for this flashcard');
+      expect(prompt).toContain('Create a clear educational illustration');
       expect(prompt).not.toContain('{question}');
       expect(prompt).not.toContain('{answer}');
     });
