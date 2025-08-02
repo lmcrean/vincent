@@ -24,7 +24,6 @@
   "scripts": {
     "build": "tsc && node build/add-shebang.js",
     "dev": "tsx src/cli.ts",
-    "dev:mock": "cross-env GEMINI_API_KEY=mock tsx src/cli.ts",
     "watch": "tsc -w",
     "test": "vitest run",
     "test:watch": "vitest",
