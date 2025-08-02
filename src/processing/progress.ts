@@ -1,12 +1,62 @@
 import path from 'path';
 import { TxtDeck, ImageStyle } from '../types.js';
 
+export interface NetworkStatus {
+  status: 'connecting' | 'connected' | 'retrying' | 'rate_limited' | 'error';
+  attempt?: number;
+  maxAttempts?: number;
+  retryDelay?: number;
+  errorMessage?: string;
+}
+
 export function createProgressBar(current: number, total: number, width: number = 20): string {
   const percentage = current / total;
   const filled = Math.round(width * percentage);
   const empty = width - filled;
   
   return `[${'█'.repeat(filled)}${'░'.repeat(empty)}]`;
+}
+
+export function formatNetworkStatus(status: NetworkStatus): string {
+  switch (status.status) {
+    case 'connecting':
+      return '🔄 Connecting...';
+    case 'connected':
+      return '✅ Connected';
+    case 'retrying':
+      const delay = status.retryDelay ? ` (${status.retryDelay}s delay)` : '';
+      return `🔄 Retrying... attempt ${status.attempt}/${status.maxAttempts}${delay}`;
+    case 'rate_limited':
+      const waitTime = status.retryDelay ? ` (wait ${status.retryDelay}s)` : '';
+      return `⏳ Rate limited${waitTime}`;
+    case 'error':
+      return `❌ ${status.errorMessage || 'Network error'}`;
+    default:
+      return '';
+  }
+}
+
+export function showCardProgress(
+  cardId: number,
+  total: number,
+  question: string,
+  networkStatus?: NetworkStatus
+): void {
+  const progressBar = createProgressBar(cardId, total);
+  const percentage = Math.round((cardId / total) * 100);
+  const remaining = Math.max(0, total - cardId);
+  const estimatedMinutes = Math.ceil(remaining * 2.5 / 60);
+  
+  const truncatedQuestion = question.length > 50 
+    ? question.substring(0, 47) + '...'
+    : question;
+  
+  console.log(`\nProcessing card ${cardId}/${total}: "${truncatedQuestion}"`);
+  console.log(`${progressBar} ${percentage}% • ~${estimatedMinutes}m remaining`);
+  
+  if (networkStatus) {
+    console.log(formatNetworkStatus(networkStatus));
+  }
 }
 
 export function showDryRunSummary(deck: TxtDeck, outputPath: string, style: ImageStyle): void {
@@ -32,7 +82,8 @@ export function showCompletionSummary(
   failedCount: number,
   outputPath: string,
   outputDir: string,
-  isInteractive: boolean = true
+  isInteractive: boolean = true,
+  apiCallCount: number = 0
 ): void {
   const successRate = Math.round((successCount / totalCards) * 100);
   
@@ -45,7 +96,8 @@ export function showCompletionSummary(
 
 ⏱️  Total time: ${Math.ceil(totalCards * 2.5 / 60)} minutes
 💰 Cost: $0.00 (free tier)
-📊 Success rate: ${successRate}%
+📊 API calls used: ${apiCallCount} (within 10,000 daily limit)
+📈 Success rate: ${successRate}%
 ${failedCount > 0 ? `⚠️  ${failedCount} cards failed to generate` : ''}
 
 📲 Next step: Import ${path.basename(outputPath)} into Anki

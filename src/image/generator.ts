@@ -2,26 +2,38 @@ import fs from 'fs-extra';
 import path from 'path';
 import { GenerationResult, ImageStyle } from '../types.js';
 import { PromptGenerator } from './prompt.js';
-import { GeminiApiClient } from './api-client.js';
+import { PollinationsApiClient } from './pollinations-client.js';
+import { HuggingFaceClient } from './huggingface-client.js';
 import { MockImageGenerator } from './mock-generator.js';
 
 export class ImageGenerator {
   private promptGenerator: PromptGenerator;
-  private apiClient: GeminiApiClient | null = null;
+  private apiClient: PollinationsApiClient | null = null;
+  private huggingFaceClient: HuggingFaceClient | null = null;
   private mockGenerator: MockImageGenerator | null = null;
   private isMockMode: boolean;
+  private isHuggingFaceMode: boolean;
 
-  constructor(apiKey: string, style: ImageStyle) {
-    console.log('🐛 DEBUG: ImageGenerator constructor called with apiKey:', apiKey);
-    this.isMockMode = apiKey === 'mock';
-    console.log('🐛 DEBUG: isMockMode set to:', this.isMockMode);
-    
+  constructor(apiKeyOrMode: string, style: ImageStyle, mockFailureConfig?: any) {
+    this.isMockMode = apiKeyOrMode === 'mock';
+    this.isHuggingFaceMode = apiKeyOrMode === 'huggingface';
     this.promptGenerator = new PromptGenerator(style);
     
     if (this.isMockMode) {
-      this.mockGenerator = new MockImageGenerator();
+      console.log('🧪 MOCK MODE ACTIVATED');
+      console.log('Using placeholder images for testing');
+      console.log('No external API calls will be made');
+      this.mockGenerator = new MockImageGenerator(mockFailureConfig);
+    } else if (this.isHuggingFaceMode) {
+      console.log('🤗 HUGGING FACE MODE ACTIVATED');
+      console.log('Using DALL-E 3 XL LoRA v2 for high-quality image generation');
+      console.log('No API key required - free Hugging Face Space');
+      this.huggingFaceClient = new HuggingFaceClient();
     } else {
-      this.apiClient = new GeminiApiClient(apiKey);
+      console.log('🌸 POLLINATIONS MODE ACTIVATED');
+      console.log('Using Pollinations AI for free image generation');
+      console.log('No API key required - completely free service');
+      this.apiClient = new PollinationsApiClient();
     }
   }
 
@@ -36,6 +48,17 @@ export class ImageGenerator {
       
       if (this.isMockMode && this.mockGenerator) {
         const imagePath = await this.mockGenerator.generateMockImage(cardId, question, outputDir);
+        return {
+          cardId,
+          success: true,
+          imagePath
+        };
+      }
+      
+      if (this.isHuggingFaceMode && this.huggingFaceClient) {
+        const imageData = await this.huggingFaceClient.generateImage(prompt);
+        const imagePath = await this.saveImage(cardId, imageData, outputDir);
+        
         return {
           cardId,
           success: true,

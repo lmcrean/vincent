@@ -37,7 +37,7 @@ export function validateTxtFile(filePath: string): void {
 export function generateOutputFilename(inputPath: string, suffix: string = 'illustrated'): string {
   const dir = path.dirname(inputPath);
   const baseName = path.basename(inputPath, '.txt');
-  return path.join(dir, `${baseName}-${suffix}.txt`);
+  return path.join(dir, 'vincent-output', `${baseName}-${suffix}.txt`);
 }
 
 export async function createTempDir(): Promise<string> {
