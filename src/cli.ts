@@ -127,12 +127,14 @@ Transform your flashcards with AI-generated educational images!
 
 async function setupApiKey(isInteractive: boolean = true, mockMode: boolean = false): Promise<void> {
   console.log('🐛 DEBUG: setupApiKey called with isInteractive:', isInteractive, 'mockMode:', mockMode);
+  console.log('🐛 DEBUG: GEMINI_API_KEY at start of setupApiKey:', JSON.stringify(process.env.GEMINI_API_KEY));
   
   // If mock mode is enabled, set mock API key
   if (mockMode) {
     process.env.GEMINI_API_KEY = 'mock';
     console.log('🧪 Mock mode enabled - using placeholder images');
     console.log('🐛 DEBUG: Set GEMINI_API_KEY to "mock"');
+    console.log('🐛 DEBUG: GEMINI_API_KEY after setting:', JSON.stringify(process.env.GEMINI_API_KEY));
     return;
   }
 
