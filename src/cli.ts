@@ -40,7 +40,9 @@ program
 
 async function runVincent(deckPath: string, options: CLIOptions): Promise<void> {
   // Check if running in non-interactive mode (tests, CI, or non-TTY)
-  const isInteractive = process.stdin.isTTY && process.env.NODE_ENV !== 'test' && process.env.CI !== 'true';
+  console.log('🐛 DEBUG: Environment check - NODE_ENV:', process.env.NODE_ENV, 'CI:', process.env.CI, 'isTTY:', process.stdin.isTTY);
+  const isInteractive = !!process.stdin.isTTY && process.env.NODE_ENV !== 'test' && process.env.CI !== 'true';
+  console.log('🐛 DEBUG: isInteractive calculated as:', isInteractive);
 
   // Show welcome header 
   showWelcomeHeader(isInteractive);
@@ -109,13 +111,20 @@ async function runVincent(deckPath: string, options: CLIOptions): Promise<void> 
   }
 
   // Process the deck
-  await processTxtDeck(deckPath, outputPath, style, options);
+  await processTxtDeck(deckPath, outputPath, style, options, isInteractive);
 }
 
 function showWelcomeHeader(isInteractive: boolean = true): void {
   if (isInteractive) {
-    console.log(chalk.bold.magenta(`
-🎨 Vincent - AI Images for Anki (v1.0)
+    console.log(chalk.hex('#FF6B35')(`
+██╗   ██╗██╗███╗   ██╗ ██████╗███████╗███╗   ██╗████████╗
+██║   ██║██║████╗  ██║██╔════╝██╔════╝████╗  ██║╚══██╔══╝
+██║   ██║██║██╔██╗ ██║██║     █████╗  ██╔██╗ ██║   ██║   
+╚██╗ ██╔╝██║██║╚██╗██║██║     ██╔══╝  ██║╚██╗██║   ██║   
+ ╚████╔╝ ██║██║ ╚████║╚██████╗███████╗██║ ╚████║   ██║   
+  ╚═══╝  ╚═╝╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═╝  ╚═══╝   ╚═╝   
+`));
+    console.log(chalk.hex('#4A90E2')(`AI Images for Anki (v1.0)
 
 Transform your flashcards with AI-generated educational images!
 `));
