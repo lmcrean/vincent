@@ -24,6 +24,11 @@ program
   .option('-v, --verbose', 'Verbose output')
   .action(async (deckPath: string, options: CLIOptions) => {
     try {
+      // Debug: Log all parsed options
+      console.log('🐛 DEBUG: Parsed options:', JSON.stringify(options, null, 2));
+      console.log('🐛 DEBUG: Mock flag value:', options.mock);
+      console.log('🐛 DEBUG: GEMINI_API_KEY env var:', process.env.GEMINI_API_KEY ? 'SET' : 'NOT SET');
+      
       await runVincent(deckPath, options);
     } catch (error) {
       logger.error(error instanceof Error ? error.message : 'Unknown error occurred');
@@ -119,10 +124,13 @@ Transform your flashcards with AI-generated educational images!
 }
 
 async function setupApiKey(isInteractive: boolean = true, mockMode: boolean = false): Promise<void> {
+  console.log('🐛 DEBUG: setupApiKey called with isInteractive:', isInteractive, 'mockMode:', mockMode);
+  
   // If mock mode is enabled, set mock API key
   if (mockMode) {
     process.env.GEMINI_API_KEY = 'mock';
     console.log('🧪 Mock mode enabled - using placeholder images');
+    console.log('🐛 DEBUG: Set GEMINI_API_KEY to "mock"');
     return;
   }
 

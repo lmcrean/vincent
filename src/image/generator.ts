@@ -18,8 +18,10 @@ export class ImageGenerator {
   private isMockMode: boolean;
 
   constructor(apiKey: string, style: ImageStyle) {
+    console.log('🐛 DEBUG: ImageGenerator constructor called with apiKey:', apiKey);
     this.apiKey = apiKey;
     this.isMockMode = apiKey === 'mock';
+    console.log('🐛 DEBUG: isMockMode set to:', this.isMockMode);
     
     const config: GeminiConfig = {
       apiKey,

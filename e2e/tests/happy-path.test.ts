@@ -120,7 +120,7 @@ describe('Happy Path E2E Tests - Iteration 1', () => {
     const result = await cli.run(['--help'])
     
     expect(result.exitCode).toBe(0)
-    expect(result.stdout).toContain('Vincent')
+    expect(result.stdout).toContain('vincent') // Command name is lowercase
     expect(result.stdout).toContain('AI image generator')
     expect(result.stdout).toContain('Usage:')
     expect(result.stdout).toContain('Options:')

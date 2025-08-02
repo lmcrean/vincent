@@ -64,12 +64,12 @@ describe('Mock Mode E2E Tests - Iteration 1', () => {
       expect(result.exitCode).toBe(0)
       
       // Should show processing progress for each card
-      expect(result.stdout).toContain('Processing card 1/6')
-      expect(result.stdout).toContain('Processing card 2/6')
-      expect(result.stdout).toContain('Processing card 6/6')
+      expect(result.stdout).toContain('Processing: Card 1/6')
+      expect(result.stdout).toContain('Processing: Card 2/6')
+      expect(result.stdout).toContain('Processing: Card 6/6')
       
       // Should show generated image names
-      expect(result.stdout).toMatch(/Generated: .*\.png \(mock\)/)
+      expect(result.stdout).toMatch(/Image generated: card-\d{3}\.png/)
     }, 30000)
 
     test('should create mock image files', async () => {
@@ -136,7 +136,9 @@ describe('Mock Mode E2E Tests - Iteration 1', () => {
       const result = await cli.runMockMode(deckPath, ['y', 'mock'])
       expect(result.exitCode).toBe(0)
       
-      const outputPath = path.join(tempDir, getExpectedOutputName(FIXTURE_FILES.SAMPLE_DECK))
+      // Output file is created in the same directory as the input file
+      const inputDir = path.dirname(deckPath)
+      const outputPath = path.join(inputDir, getExpectedOutputName(FIXTURE_FILES.SAMPLE_DECK))
       const outputContent = await readFile(outputPath, 'utf8')
       const outputLines = outputContent.trim().split('\n')
       
@@ -145,8 +147,13 @@ describe('Mock Mode E2E Tests - Iteration 1', () => {
         const [originalQ, originalA] = originalLines[i].split(';')
         const outputLine = outputLines[i]
         
-        expect(outputLine).toContain(originalQ)
-        expect(outputLine).toContain(originalA)
+        // Enhanced format: question;answer;<img src='image.png'>
+        const outputParts = outputLine.split(';')
+        expect(outputParts.length).toBeGreaterThanOrEqual(3) // Should have Q, A, and image
+        
+        expect(outputParts[0].trim()).toBe(originalQ.trim()) // Question should match (trimmed)
+        expect(outputParts[1].trim()).toBe(originalA.trim()) // Answer should match (trimmed)
+        expect(outputParts[2]).toContain('<img src=') // Should have image tag
       }
     }, 30000)
 
@@ -177,11 +184,10 @@ describe('Mock Mode E2E Tests - Iteration 1', () => {
       const result = await cli.runMockMode(deckPath, ['y', 'mock'])
       
       expect(result.exitCode).toBe(0)
-      expect(result.stdout).toContain('Processing complete')
-      expect(result.stdout).toContain('Enhanced deck:')
-      expect(result.stdout).toContain('Generated images:')
-      expect(result.stdout).toContain('Success rate: 100%')
-      expect(result.stdout).toContain('6/6 cards')
+      expect(result.stdout).toContain('✅ Complete! 6/6 images generated successfully.')
+      expect(result.stdout).toContain('📁 Created files:')
+      expect(result.stdout).toContain('📊 Success rate: 100%')
+      expect(result.stdout).toContain('sample-deck-illustrated.txt')
     }, 30000)
   })
 
