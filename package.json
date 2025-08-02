@@ -30,6 +30,7 @@
     "test:integration": "vitest run --config vitest.integration.config.ts",
     "test:e2e": "cd e2e && npm test",
     "test:e2e:happy": "cd e2e && npm test -- tests/happy-path.test.ts",
+    "test:e2e:happy:2": "cd e2e && npm test -- tests/happy-path-i2.test.ts",
     "test:e2e:watch": "cd e2e && npm run test:watch",
     "test:e2e:coverage": "cd e2e && npm run test:coverage",
     "test:all": "npm test && npm run test:integration && npm run test:e2e",
@@ -43,6 +44,7 @@
     "axios": "^1.6.0",
     "chalk": "^4.1.2",
     "commander": "^11.0.0",
+    "dotenv": "^17.2.1",
     "fs-extra": "^11.2.0",
     "prompts": "^2.4.2"
   },

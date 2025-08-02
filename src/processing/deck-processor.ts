@@ -38,12 +38,10 @@ export async function processTxtDeck(
 
     const outputDir = await createOutputDirectory(outputPath);
 
-    const apiKey = process.env.GEMINI_API_KEY;
-    if (!apiKey) {
-      throw new Error('No API key available');
-    }
+    // Determine image generation mode
+    const mode = options.mock ? 'mock' : 'pollinations';
     
-    imageGenerator = new ImageGenerator(apiKey, style);
+    imageGenerator = new ImageGenerator(mode, style);
 
     logger.progress('Generating images...');
     const generatedImages = new Map<number, string>();

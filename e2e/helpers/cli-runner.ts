@@ -2,9 +2,14 @@ import { execa, type ExecaReturnValue } from 'execa'
 import path from 'path'
 import { fileURLToPath } from 'url'
 import os from 'os'
+import dotenv from 'dotenv'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
+
+// Load environment variables from parent directory's .env file
+const parentDir = path.resolve(__dirname, '../..')
+dotenv.config({ path: path.join(parentDir, '.env') })
 
 // Path to the source Vincent CLI (using tsx for direct execution)
 const CLI_SOURCE_PATH = path.resolve(__dirname, '../../src/cli.ts')

@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+import 'dotenv/config';
 import { Command } from 'commander';
 import chalk from 'chalk';
 import { CLIOptions, ImageStyle } from '../types.js';
@@ -60,7 +61,14 @@ async function runVincent(deckPath: string, options: CLIOptions): Promise<void> 
   }
 
   validateAllOptions(deckPath, options);
-  await setupApiKey(isInteractive, options.mock);
+  
+  // Skip API key setup since Pollinations is free and doesn't require keys
+  if (!options.mock && isInteractive) {
+    console.log('🌸 Using Pollinations AI for free image generation');
+    console.log('✅ No API key required - completely free service');
+    console.log('🌍 Available globally including UK');
+  }
+  
   const style = await getStylePreference(options.style as ImageStyle, isInteractive);
   const outputPath = options.output || generateOutputFilename(deckPath);
 

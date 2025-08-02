@@ -2,26 +2,29 @@ import fs from 'fs-extra';
 import path from 'path';
 import { GenerationResult, ImageStyle } from '../types.js';
 import { PromptGenerator } from './prompt.js';
-import { GeminiApiClient } from './api-client.js';
+import { PollinationsApiClient } from './pollinations-client.js';
 import { MockImageGenerator } from './mock-generator.js';
 
 export class ImageGenerator {
   private promptGenerator: PromptGenerator;
-  private apiClient: GeminiApiClient | null = null;
+  private apiClient: PollinationsApiClient | null = null;
   private mockGenerator: MockImageGenerator | null = null;
   private isMockMode: boolean;
 
-  constructor(apiKey: string, style: ImageStyle) {
-    console.log('🐛 DEBUG: ImageGenerator constructor called with apiKey:', apiKey);
-    this.isMockMode = apiKey === 'mock';
-    console.log('🐛 DEBUG: isMockMode set to:', this.isMockMode);
-    
+  constructor(apiKeyOrMode: string, style: ImageStyle, mockFailureConfig?: any) {
+    this.isMockMode = apiKeyOrMode === 'mock';
     this.promptGenerator = new PromptGenerator(style);
     
     if (this.isMockMode) {
-      this.mockGenerator = new MockImageGenerator();
+      console.log('🧪 MOCK MODE ACTIVATED');
+      console.log('Using placeholder images for testing');
+      console.log('No external API calls will be made');
+      this.mockGenerator = new MockImageGenerator(mockFailureConfig);
     } else {
-      this.apiClient = new GeminiApiClient(apiKey);
+      console.log('🌸 POLLINATIONS MODE ACTIVATED');
+      console.log('Using Pollinations AI for free image generation');
+      console.log('No API key required - completely free service');
+      this.apiClient = new PollinationsApiClient();
     }
   }
 
