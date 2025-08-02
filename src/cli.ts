@@ -24,7 +24,9 @@ program
   .option('-v, --verbose', 'Verbose output')
   .action(async (deckPath: string, options: CLIOptions) => {
     try {
-      // Debug: Log all parsed options
+      // Debug: Log raw command line arguments and parsing
+      console.log('🐛 DEBUG: process.argv:', process.argv);
+      console.log('🐛 DEBUG: deckPath argument:', deckPath);
       console.log('🐛 DEBUG: Parsed options:', JSON.stringify(options, null, 2));
       console.log('🐛 DEBUG: Mock flag value:', options.mock);
       console.log('🐛 DEBUG: GEMINI_API_KEY env var:', process.env.GEMINI_API_KEY ? 'SET' : 'NOT SET');
