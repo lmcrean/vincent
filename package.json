@@ -1,6 +1,6 @@
 {
   "name": "vincent-anki",
-  "version": "1.0.0",
+  "version": "0.3.0",
   "description": "AI image generator for Anki flashcards using Gemini API",
   "keywords": [
     "anki",
