@@ -8,24 +8,29 @@ interface StyleTemplate {
 
 const STYLE_TEMPLATES: Record<ImageStyle, StyleTemplate> = {
   educational: {
-    vocabulary: "Create a clear educational illustration for '{question}' showing '{answer}'. Style: clean, minimal text, suitable for memorization and learning.",
-    concept: "Generate an educational diagram explaining: {question}. Key concept: {answer}. Style: clear labels, simple graphics, textbook quality.",
-    default: "Create an educational illustration for this flashcard. Question: {question}. Answer: {answer}. Style: clean, informative, study-friendly."
+    vocabulary: "Create a simple visual symbol representing '{question}' and '{answer}'. NO TEXT, NO LABELS, NO WRITING. Pure visual icon only. Style: clean, symbolic, recognizable.",
+    concept: "Generate a simple visual icon for {question} representing {answer}. NO TEXT, NO LABELS, NO WRITING. Style: symbolic representation, visual metaphor only.",
+    default: "Create a visual symbol for this concept. Question: {question}. Answer: {answer}. NO TEXT, NO LABELS, NO WRITING. Pure icon only."
   },
   medical: {
-    vocabulary: "Create a detailed medical illustration showing {question}. Focus on {answer}. Style: anatomical accuracy, medical textbook quality, professional.",
-    concept: "Generate a medical-style diagram for {question} demonstrating {answer}. Style: clinical precision, anatomical detail, healthcare professional quality.",
-    default: "Create a medical illustration for {question} showing {answer}. Style: professional, clinical, anatomically accurate."
+    vocabulary: "Create an anatomical symbol showing {question} representing {answer}. NO TEXT, NO LABELS, NO WRITING. Style: anatomical shape, medical symbol only.",
+    concept: "Generate a medical-style visual symbol for {question} showing {answer}. NO TEXT, NO LABELS, NO WRITING. Style: anatomical icon, medical symbol.",
+    default: "Create a medical symbol for {question} representing {answer}. NO TEXT, NO LABELS, NO WRITING. Anatomical icon only."
   },
   colorful: {
-    vocabulary: "Create a vibrant, memorable illustration for {question} showing {answer}. Style: colorful, engaging, fun, easy to remember.",
-    concept: "Generate a colorful, engaging visual for {question} demonstrating {answer}. Style: bright colors, memorable design, visually appealing.",
-    default: "Create a colorful, memorable illustration for {question} and {answer}. Style: vibrant, engaging, fun, visually striking."
+    vocabulary: "Create a bright, colorful symbol for {question} representing {answer}. NO TEXT, NO LABELS, NO WRITING. Style: vibrant icon, memorable visual symbol.",
+    concept: "Generate a colorful visual symbol for {question} showing {answer}. NO TEXT, NO LABELS, NO WRITING. Style: bright colors, symbolic representation.",
+    default: "Create a colorful symbol for {question} and {answer}. NO TEXT, NO LABELS, NO WRITING. Vibrant icon only."
   },
   minimal: {
-    vocabulary: "Create a simple, minimalist icon representing {question} and {answer}. Style: clean lines, essential elements only, minimal text.",
-    concept: "Generate a minimal diagram for {question} showing {answer}. Style: simple shapes, clean design, no unnecessary details.",
-    default: "Create a minimalist illustration for {question} and {answer}. Style: simple, clean, essential elements only."
+    vocabulary: "Create a simple geometric icon representing {question} and {answer}. NO TEXT, NO LABELS, NO WRITING. Style: minimal shapes, essential visual elements only.",
+    concept: "Generate a minimalist symbol for {question} showing {answer}. NO TEXT, NO LABELS, NO WRITING. Style: geometric shapes, pure visual abstraction.",
+    default: "Create a minimalist icon for {question} and {answer}. NO TEXT, NO LABELS, NO WRITING. Simple geometric symbol only."
+  },
+  iconic: {
+    vocabulary: "Create a universally recognizable icon for '{question}' representing '{answer}'. NO TEXT, NO LABELS, NO WRITING. Style: simple symbol, instantly recognizable.",
+    concept: "Generate a symbolic icon for {question} representing {answer}. NO TEXT, NO LABELS, NO WRITING. Style: universal symbol, visual metaphor.",
+    default: "Create a pure icon representing {question} and {answer}. NO TEXT, NO LABELS, NO WRITING. Universal symbol only."
   }
 };
 
