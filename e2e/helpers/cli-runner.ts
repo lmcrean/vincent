@@ -6,8 +6,8 @@ import os from 'os'
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
-// Path to the compiled Vincent CLI
-const CLI_PATH = path.resolve(__dirname, '../../dist/cli.js')
+// Path to the source Vincent CLI (using tsx for direct execution)
+const CLI_SOURCE_PATH = path.resolve(__dirname, '../../src/cli.ts')
 
 export interface CLIResult {
   stdout: string
@@ -44,7 +44,7 @@ export class CLIRunner {
     const mergedOptions = { ...this.defaultOptions, ...options }
     
     try {
-      const result: ExecaReturnValue = await execa('node', [CLI_PATH, ...args], {
+      const result: ExecaReturnValue = await execa('npx', ['tsx', CLI_SOURCE_PATH, ...args], {
         timeout: mergedOptions.timeout,
         env: { ...process.env, ...mergedOptions.env },
         cwd: mergedOptions.cwd,
@@ -66,7 +66,7 @@ export class CLIRunner {
         stderr: error.stderr || '',
         exitCode: error.exitCode || 1,
         failed: true,
-        command: error.command || `node ${CLI_PATH} ${args.join(' ')}`
+        command: error.command || `npx tsx ${CLI_SOURCE_PATH} ${args.join(' ')}`
       }
     }
   }
@@ -122,7 +122,7 @@ export class CLIRunner {
    */
   static async checkCLIExists(): Promise<boolean> {
     try {
-      const result = await execa('node', [CLI_PATH, '--version'], {
+      const result = await execa('npx', ['tsx', CLI_SOURCE_PATH, '--version'], {
         timeout: 5000,
         reject: false
       })
@@ -137,7 +137,7 @@ export class CLIRunner {
    */
   static async getCLIVersion(): Promise<string> {
     try {
-      const result = await execa('node', [CLI_PATH, '--version'], {
+      const result = await execa('npx', ['tsx', CLI_SOURCE_PATH, '--version'], {
         timeout: 5000
       })
       return result.stdout.trim()
