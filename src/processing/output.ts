@@ -5,7 +5,7 @@ import { TxtDeck } from '../types.js';
 import { logger } from '../utils/logger.js';
 
 export async function createOutputDirectory(outputPath: string): Promise<string> {
-  const outputDir = path.join(path.dirname(outputPath), 'vincent-output');
+  const outputDir = path.dirname(outputPath);
   await ensureDir(outputDir);
   return outputDir;
 }
