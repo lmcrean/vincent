@@ -76,6 +76,16 @@ export class HuggingFaceClient {
 
           // Discover available endpoints
           await this.discoverEndpoint();
+          
+          // Test connection to make sure space is responsive
+          console.log(`🔍 Testing HuggingFace Space responsiveness...`);
+          try {
+            await this.client.view_api();
+            console.log(`✅ Space is responsive`);
+          } catch (testError) {
+            console.log(`⚠️ Space may be experiencing issues:`, testError);
+            throw new ConnectionError('HuggingFace Space is not responding properly. Try again later or use --generator pollinations');
+          }
         }
 
         // Prepare generation parameters
@@ -126,7 +136,10 @@ export class HuggingFaceClient {
         // Enhanced error logging for debugging
         console.log('🐛 DEBUG: Hugging Face API Error Details:', {
           message: error instanceof Error ? error.message : 'unknown',
-          attempt: attempt
+          name: error instanceof Error ? error.name : 'unknown',
+          stack: error instanceof Error ? error.stack : 'unknown',
+          attempt: attempt,
+          error: error
         });
         
         // Handle different types of errors
@@ -152,8 +165,31 @@ export class HuggingFaceClient {
           }
         }
         
-        // Re-throw unknown errors
-        throw error instanceof Error ? error : new Error('Unknown error occurred');
+        // Handle Gradio-specific errors from the error object
+        if (error && typeof error === 'object' && 'message' in error) {
+          const gradioMessage = (error as any).message;
+          
+          // GPU quota exceeded - not immediately retryable
+          if (typeof gradioMessage === 'string' && gradioMessage.includes('exceeded your GPU quota')) {
+            const match = gradioMessage.match(/retry in (\d+:\d+:\d+)/);
+            const retryTime = match ? match[1] : 'later';
+            throw new APIError(`🚫 HuggingFace GPU quota exceeded. Please retry in ${retryTime} or use --generator pollinations for unlimited free usage.`);
+          }
+          
+          // Rate limiting errors
+          if (typeof gradioMessage === 'string' && (gradioMessage.includes('rate limit') || gradioMessage.includes('too many requests'))) {
+            throw new NetworkError(`HuggingFace Space rate limited. Try again in a few minutes.`);
+          }
+          
+          // Queue is full
+          if (typeof gradioMessage === 'string' && gradioMessage.includes('queue')) {
+            throw new NetworkError(`HuggingFace Space queue is full. Try again in a few minutes.`);
+          }
+        }
+        
+        // Re-throw unknown errors with more context
+        const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+        throw new Error(`HuggingFace Space error: ${errorMessage}. Try using --generator pollinations instead.`);
       }
     });
   }
