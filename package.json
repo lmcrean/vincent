@@ -2,7 +2,14 @@
   "name": "vincent-anki",
   "version": "1.0.0",
   "description": "AI image generator for Anki flashcards using Gemini API",
-  "keywords": ["anki", "flashcards", "ai", "images", "gemini", "education"],
+  "keywords": [
+    "anki",
+    "flashcards",
+    "ai",
+    "images",
+    "gemini",
+    "education"
+  ],
   "bin": {
     "vincent": "./dist/cli.js"
   },
@@ -17,6 +24,7 @@
   "scripts": {
     "build": "tsc && node build/add-shebang.js",
     "dev": "tsx src/cli.ts",
+    "dev:mock": "cross-env GEMINI_API_KEY=mock tsx src/cli.ts",
     "watch": "tsc -w",
     "test": "vitest run",
     "test:watch": "vitest",
@@ -32,27 +40,28 @@
     "clean": "rm -rf dist"
   },
   "dependencies": {
-    "commander": "^11.0.0",
-    "chalk": "^4.1.2",
-    "prompts": "^2.4.2",
     "axios": "^1.6.0",
-    "fs-extra": "^11.2.0"
+    "chalk": "^4.1.2",
+    "commander": "^11.0.0",
+    "fs-extra": "^11.2.0",
+    "prompts": "^2.4.2"
   },
   "devDependencies": {
-    "@types/node": "^20.0.0",
     "@types/fs-extra": "^11.0.0",
+    "@types/node": "^20.0.0",
     "@types/prompts": "^2.4.0",
-    "typescript": "^5.0.0",
-    "tsx": "^4.0.0",
-    "vitest": "^1.0.0",
-    "@vitest/ui": "^1.0.0",
-    "@vitest/coverage-v8": "^1.0.0",
-    "msw": "^2.0.0",
-    "memfs": "^4.0.0",
-    "tmp-promise": "^3.0.3",
     "@typescript-eslint/eslint-plugin": "^6.0.0",
     "@typescript-eslint/parser": "^6.0.0",
-    "eslint": "^8.0.0"
+    "@vitest/coverage-v8": "^1.0.0",
+    "@vitest/ui": "^1.0.0",
+    "cross-env": "^10.0.0",
+    "eslint": "^8.0.0",
+    "memfs": "^4.0.0",
+    "msw": "^2.0.0",
+    "tmp-promise": "^3.0.3",
+    "tsx": "^4.0.0",
+    "typescript": "^5.0.0",
+    "vitest": "^1.0.0"
   },
   "repository": {
     "type": "git",

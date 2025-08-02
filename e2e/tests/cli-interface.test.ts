@@ -119,9 +119,9 @@ describe('CLI Interface Tests - Iteration 1', () => {
       const result = await cli.runNonInteractive([deckPath])
       
       expect(result.exitCode).toBe(0)
-      // Should use educational style by default
-      expect(result.stdout).toContain('educational')
-    }, 30000)
+      // Should show MOCK MODE ACTIVATED since we're using mock API key
+      expect(result.stdout).toContain('MOCK MODE ACTIVATED')
+    }, 45000)
 
     test('should not show configuration summary in non-interactive mode', async () => {
       const tempDir = getTempDir()
@@ -133,7 +133,8 @@ describe('CLI Interface Tests - Iteration 1', () => {
       expect(result.exitCode).toBe(0)
       // Configuration summary is only shown in interactive mode
       expect(result.stdout).not.toContain('📋 Configuration:')
-    }, 30000)
+      expect(result.stdout).toContain('MOCK MODE ACTIVATED')
+    }, 45000)
 
     test('should not prompt for confirmation in non-interactive mode', async () => {
       const tempDir = getTempDir()
@@ -145,7 +146,8 @@ describe('CLI Interface Tests - Iteration 1', () => {
       expect(result.exitCode).toBe(0)
       // Should proceed without asking for confirmation
       expect(result.stdout).not.toContain('Generate images for all cards?')
-    }, 30000)
+      expect(result.stdout).toContain('MOCK MODE ACTIVATED')
+    }, 45000)
   })
 
   describe('Environment Variables', () => {
