@@ -72,9 +72,8 @@ export async function getExpectedImageNames(deckFilename: string): Promise<strin
   const cards = await parseFixtureCards(deckFilename)
   
   return cards.map((_, index) => {
-    // This would match the actual image naming logic from Vincent
-    // For now, using a simple pattern that matches mock implementation
-    const suffix = Math.random().toString(36).substring(2, 8)
-    return `generated_image_${index + 1}_${suffix}.png`
+    // Match the actual image naming logic from Vincent
+    const cardId = index + 1
+    return `card-${cardId.toString().padStart(3, '0')}.png`
   })
 }

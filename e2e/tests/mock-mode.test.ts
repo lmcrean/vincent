@@ -164,9 +164,9 @@ describe('Mock Mode E2E Tests - Iteration 1', () => {
       const uniqueNames = new Set(pngFiles)
       expect(uniqueNames.size).toBe(pngFiles.length)
       
-      // Image names should follow expected pattern
+      // Image names should follow expected pattern: card-001.png, card-002.png, etc.
       for (const pngFile of pngFiles) {
-        expect(pngFile).toMatch(/^[a-z_]+[a-z0-9]{7,}\.png$/)
+        expect(pngFile).toMatch(/^card-\d{3}\.png$/)
       }
     }, 30000)
 

@@ -90,25 +90,27 @@ export class CLIRunner {
   /**
    * Run Vincent with mock mode (no actual API calls)
    */
-  async runMockMode(deckPath: string, inputs: string[] = ['y', 'mock'], options: CLIOptions = {}): Promise<CLIResult> {
-    return this.runInteractive([deckPath], inputs, {
+  async runMockMode(deckPath: string, inputs: string[] = ['y'], options: CLIOptions = {}): Promise<CLIResult> {
+    return this.runInteractive([deckPath, '--mock'], inputs, {
       ...options,
       env: {
         ...options.env,
-        // Don't set GEMINI_API_KEY so the CLI will prompt for it
+        // Mock flag handles API key automatically
       }
     })
   }
 
   /**
-   * Run Vincent with non-interactive mode (requires API key in env)
+   * Run Vincent with non-interactive mode (uses mock mode by default for testing)
    */
   async runNonInteractive(args: string[] = [], options: CLIOptions = {}): Promise<CLIResult> {
-    return this.run(args, {
+    // Add --mock flag if not already present
+    const finalArgs = args.includes('--mock') ? args : [...args, '--mock']
+    
+    return this.run(finalArgs, {
       ...options,
       env: {
         ...options.env,
-        GEMINI_API_KEY: options.env?.GEMINI_API_KEY || 'mock',
         NODE_ENV: 'test',
         CI: 'true'
       }

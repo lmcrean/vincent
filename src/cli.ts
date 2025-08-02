@@ -20,6 +20,7 @@ program
   .option('-s, --style <style>', 'Image style (educational, medical, colorful)', 'educational')
   .option('-c, --concurrency <number>', 'Number of concurrent image generations (1-10)', '3')
   .option('--dry-run', 'Show what would be done without generating images')
+  .option('--mock', 'Use mock mode for testing (no API calls)')
   .option('-v, --verbose', 'Verbose output')
   .action(async (deckPath: string, options: CLIOptions) => {
     try {
@@ -80,7 +81,7 @@ async function runVincent(deckPath: string, options: CLIOptions): Promise<void> 
   }
 
   // Setup API key if needed
-  await setupApiKey(isInteractive);
+  await setupApiKey(isInteractive, options.mock);
 
   // Get style preference
   const style = await getStylePreference(options.style as ImageStyle, isInteractive);
@@ -117,7 +118,14 @@ Transform your flashcards with AI-generated educational images!
   }
 }
 
-async function setupApiKey(isInteractive: boolean = true): Promise<void> {
+async function setupApiKey(isInteractive: boolean = true, mockMode: boolean = false): Promise<void> {
+  // If mock mode is enabled, set mock API key
+  if (mockMode) {
+    process.env.GEMINI_API_KEY = 'mock';
+    console.log('🧪 Mock mode enabled - using placeholder images');
+    return;
+  }
+
   const configManager = new ConfigManager();
   let apiKey: string | null = await configManager.getApiKey();
 

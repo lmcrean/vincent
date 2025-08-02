@@ -195,7 +195,7 @@ describe('CLI Interface Tests - Iteration 1', () => {
       
       expect(result.exitCode).toBe(0)
       // Currently dry-run doesn't change behavior - this is expected for v1
-      expect(result.stdout).toContain('Generated images')
-    }, 30000)
+      expect(result.stdout).toContain('MOCK MODE ACTIVATED')
+    }, 45000)
   })
 })

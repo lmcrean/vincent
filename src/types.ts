@@ -36,4 +36,5 @@ export interface CLIOptions {
   dryRun?: boolean;
   verbose?: boolean;
   concurrency?: number;
+  mock?: boolean;
 }
