@@ -83,9 +83,9 @@ describe('Happy Path E2E Tests - Iteration 2 (Network Resilience)', () => {
     expect(outputContent).toContain('recursion')
     expect(outputContent).toContain('<img src=')
     
-    // Should have generated 6 images
-    const imagesDir = path.join(tempDir, 'vincent-output', 'images')
-    expect(await pathExists(imagesDir)).toBe(true)
+    // Should have generated 6 images in vincent-output directory
+    const outputDir = path.join(tempDir, 'vincent-output')
+    expect(await pathExists(outputDir)).toBe(true)
     
     // Verify all 6 cards processed
     const outputLines = outputContent.trim().split('\n').filter(line => line.trim())

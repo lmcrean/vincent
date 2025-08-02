@@ -27,18 +27,6 @@ export class TxtWriter {
       const content = enhancedLines.join('\n') + '\n';
       await fs.writeFile(outputPath, content, 'utf8');
       
-      // Copy image files to output directory if they exist
-      if (generatedImages.size > 0) {
-        const outputDir = path.dirname(outputPath);
-        for (const [cardId, imagePath] of generatedImages) {
-          if (await fs.pathExists(imagePath)) {
-            const imageFileName = path.basename(imagePath);
-            const destPath = path.join(outputDir, imageFileName);
-            await fs.copy(imagePath, destPath);
-          }
-        }
-      }
-      
     } catch (error) {
       if (error instanceof FileError) {
         throw error;
