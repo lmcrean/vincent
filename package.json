@@ -29,6 +29,7 @@
     "test:watch": "vitest",
     "test:integration": "vitest run --config vitest.integration.config.ts",
     "test:e2e": "cd e2e && npm test",
+    "test:e2e:happy": "cd e2e && npm test -- tests/happy-path.test.ts",
     "test:e2e:watch": "cd e2e && npm run test:watch",
     "test:e2e:coverage": "cd e2e && npm run test:coverage",
     "test:all": "npm test && npm run test:integration && npm run test:e2e",
