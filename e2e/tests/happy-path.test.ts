@@ -65,7 +65,9 @@ describe('Happy Path E2E Tests - Iteration 1', () => {
       const result = await cli.runNonInteractive([deckPath, '--style', style])
       
       expect(result.exitCode).toBe(0)
-      expect(result.stdout).toContain(`Style:  ${style}`)
+      // In non-interactive mode, verify style is parsed correctly in debug output
+      expect(result.stdout).toContain(`"style": "${style}"`)
+      expect(result.stdout).toContain('Complete!')
     }
   }, 45000)
 
