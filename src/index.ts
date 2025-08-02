@@ -11,7 +11,8 @@ export async function processTxtDeck(
   inputPath: string,
   outputPath: string,
   style: ImageStyle,
-  options: CLIOptions
+  options: CLIOptions,
+  isInteractive: boolean = true
 ): Promise<void> {
   const parser = new TxtParser();
   const writer = new TxtWriter();
@@ -111,7 +112,8 @@ export async function processTxtDeck(
         generatedImages.size,
         failed,
         outputPath,
-        outputDir
+        outputDir,
+        isInteractive
       );
     } else {
       logger.error('No images were generated successfully');
@@ -153,7 +155,8 @@ function showCompletionSummary(
   successCount: number,
   failedCount: number,
   outputPath: string,
-  outputDir: string
+  outputDir: string,
+  isInteractive: boolean = true
 ): void {
   const successRate = Math.round((successCount / totalCards) * 100);
   
@@ -170,11 +173,12 @@ function showCompletionSummary(
 ${failedCount > 0 ? `⚠️  ${failedCount} cards failed to generate` : ''}
 
 📲 Next step: Import ${path.basename(outputPath)} into Anki
+${isInteractive ? '\nPress Enter to exit...' : ''}`);
 
-Press Enter to exit...`);
-
-  // Wait for user input before exiting
-  process.stdin.once('data', () => {
-    process.exit(0);
-  });
+  // Wait for user input before exiting (only in interactive mode)
+  if (isInteractive) {
+    process.stdin.once('data', () => {
+      process.exit(0);
+    });
+  }
 }
