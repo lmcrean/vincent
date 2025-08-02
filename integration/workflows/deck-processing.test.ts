@@ -48,12 +48,12 @@ describe('End-to-End Deck Processing Tests', () => {
       expect(isValid).toBe(true);
 
       // Verify images were generated
-      const imageDir = path.join(path.dirname(outputApkgPath), 'vincent-output', 'images');
-      expect(await fs.pathExists(imageDir)).toBe(true);
+      const outputDir = path.join(path.dirname(outputApkgPath), 'vincent-output');
+      expect(await fs.pathExists(outputDir)).toBe(true);
 
-      const imageFiles = await fs.readdir(imageDir);
+      const outputFiles = await fs.readdir(outputDir);
+      const imageFiles = outputFiles.filter(file => file.endsWith('.png'));
       expect(imageFiles.length).toBeGreaterThan(0);
-      expect(imageFiles.some(file => file.endsWith('.png'))).toBe(true);
     });
 
     it('should process vocabulary deck with all cards', async () => {
@@ -74,8 +74,9 @@ describe('End-to-End Deck Processing Tests', () => {
       expect(isValid).toBe(true);
 
       // Verify correct number of images generated
-      const imageDir = path.join(path.dirname(outputApkgPath), 'vincent-output', 'images');
-      const imageFiles = await fs.readdir(imageDir);
+      const outputDir = path.join(path.dirname(outputApkgPath), 'vincent-output');
+      const outputFiles = await fs.readdir(outputDir);
+      const imageFiles = outputFiles.filter(file => file.endsWith('.png'));
       expect(imageFiles.length).toBe(sampleCards.vocabulary.length);
     });
 
@@ -100,8 +101,9 @@ describe('End-to-End Deck Processing Tests', () => {
         expect(await fs.pathExists(styleOutputPath)).toBe(true);
         
         // Verify images were generated
-        const imageDir = path.join(path.dirname(styleOutputPath), 'vincent-output', 'images');
-        const imageFiles = await fs.readdir(imageDir);
+        const outputDir = path.join(path.dirname(styleOutputPath), 'vincent-output');
+        const outputFiles = await fs.readdir(outputDir);
+        const imageFiles = outputFiles.filter(file => file.endsWith('.png'));
         expect(imageFiles.length).toBeGreaterThan(0);
       }
     });
@@ -147,9 +149,10 @@ describe('End-to-End Deck Processing Tests', () => {
 
       expect(await fs.pathExists(outputApkgPath)).toBe(true);
       
-      // Both existing media and new images should be present
-      const imageDir = path.join(path.dirname(outputApkgPath), 'vincent-output', 'images');
-      const imageFiles = await fs.readdir(imageDir);
+      // New images should be present
+      const outputDir = path.join(path.dirname(outputApkgPath), 'vincent-output');
+      const outputFiles = await fs.readdir(outputDir);
+      const imageFiles = outputFiles.filter(file => file.endsWith('.png'));
       expect(imageFiles.length).toBe(sampleCards.vocabulary.length);
     });
   });
@@ -413,8 +416,9 @@ describe('End-to-End Deck Processing Tests', () => {
         testConfigs.basic
       );
 
-      const imageDir = path.join(path.dirname(outputApkgPath), 'vincent-output', 'images');
-      const imageFiles = await fs.readdir(imageDir);
+      const outputDir = path.join(path.dirname(outputApkgPath), 'vincent-output');
+      const outputFiles = await fs.readdir(outputDir);
+      const imageFiles = outputFiles.filter(file => file.endsWith('.png'));
       
       expect(imageFiles.length).toBe(1);
       
@@ -422,7 +426,7 @@ describe('End-to-End Deck Processing Tests', () => {
       expect(path.extname(imageFile)).toBe('.png');
       
       // Verify image file has content
-      const imagePath = path.join(imageDir, imageFile);
+      const imagePath = path.join(outputDir, imageFile);
       const stats = await fs.stat(imagePath);
       expect(stats.size).toBeGreaterThan(0);
     });
