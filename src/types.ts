@@ -24,11 +24,11 @@ export interface GenerationResult {
 
 export interface Config {
   apiKey: string;
-  style: 'educational' | 'medical' | 'colorful' | 'minimal';
+  style: 'educational' | 'medical' | 'colorful' | 'minimal' | 'iconic';
   outputDir: string;
 }
 
-export type ImageStyle = 'educational' | 'medical' | 'colorful' | 'minimal';
+export type ImageStyle = 'educational' | 'medical' | 'colorful' | 'minimal' | 'iconic';
 
 export interface CLIOptions {
   output?: string;
