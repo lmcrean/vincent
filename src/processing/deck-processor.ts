@@ -39,7 +39,7 @@ export async function processTxtDeck(
     const outputDir = await createOutputDirectory(outputPath);
 
     // Determine image generation mode
-    const mode = options.mock ? 'mock' : 'pollinations';
+    const mode = options.mock ? 'mock' : (options.generator || 'pollinations');
     
     imageGenerator = new ImageGenerator(mode, style);
 

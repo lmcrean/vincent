@@ -1,6 +1,1 @@
-What is a binary tree?;A tree data structure where each node has at most two children, referred to as the left child and right child
-Define recursion;A programming technique where a function calls itself to solve smaller instances of the same problem
-What is Big O notation?;Mathematical notation that describes the limiting behavior of a function when the argument tends towards infinity
-Explain the difference between a stack and a queue;Stack follows LIFO (Last In First Out) principle, while queue follows FIFO (First In First Out) principle
-What is polymorphism in OOP?;The ability of objects of different types to be treated as objects of a common base type
-Define encapsulation;The bundling of data and methods that work on that data within one unit, and restricting access to some components
+What is photosynthesis?;The process by which plants convert light into energy

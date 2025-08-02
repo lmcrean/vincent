@@ -147,8 +147,8 @@ Your key is saved locally for future use.
 ## Output
 
 Vincent creates:
-- Enhanced `.txt` file ready for Anki import
-- `vincent-output/images/` folder with generated images
+- Enhanced `.txt` file ready for Anki import in `vincent-output/` folder
+- Generated PNG images alongside the text file in `vincent-output/` folder
 - Images are automatically embedded in your flashcards
 
 ## Requirements

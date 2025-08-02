@@ -30,9 +30,12 @@ export interface Config {
 
 export type ImageStyle = 'educational' | 'medical' | 'colorful' | 'minimal' | 'iconic';
 
+export type GeneratorMode = 'pollinations' | 'huggingface' | 'mock';
+
 export interface CLIOptions {
   output?: string;
   style?: ImageStyle;
+  generator?: GeneratorMode;
   dryRun?: boolean;
   verbose?: boolean;
   concurrency?: number;

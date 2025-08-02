@@ -28,3 +28,5 @@ coverage/
 !README.md
 docs/*.md
 */settings.local.json
+
+computer-science.txt

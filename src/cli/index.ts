@@ -25,6 +25,7 @@ program
   .argument('[deck]', 'Path to .txt file')
   .option('-o, --output <path>', 'Output file path')
   .option('-s, --style <style>', 'Image style (educational, medical, colorful)', 'educational')
+  .option('-g, --generator <type>', 'Image generator (pollinations, huggingface, mock)', 'pollinations')
   .option('-c, --concurrency <number>', 'Number of concurrent image generations (1-10)', '3')
   .option('--dry-run', 'Show what would be done without generating images')
   .option('--mock', 'Use mock mode for testing (no API calls)')
@@ -62,11 +63,26 @@ async function runVincent(deckPath: string, options: CLIOptions): Promise<void> 
 
   validateAllOptions(deckPath, options);
   
-  // Skip API key setup since Pollinations is free and doesn't require keys
-  if (!options.mock && isInteractive) {
-    console.log('🌸 Using Pollinations AI for free image generation');
-    console.log('✅ No API key required - completely free service');
-    console.log('🌍 Available globally including UK');
+  // Display generator selection info
+  if (isInteractive) {
+    const generator = options.mock ? 'mock' : (options.generator || 'pollinations');
+    switch (generator) {
+      case 'mock':
+        console.log('🧪 Using MOCK mode for testing');
+        console.log('✅ No API calls will be made');
+        break;
+      case 'huggingface':
+        console.log('🤗 Using Hugging Face DALL-E 3 XL LoRA v2');
+        console.log('✅ High-quality image generation');
+        console.log('✅ No API key required - free Hugging Face Space');
+        break;
+      case 'pollinations':
+      default:
+        console.log('🌸 Using Pollinations AI for image generation');
+        console.log('✅ No API key required - completely free service');
+        console.log('🌍 Available globally including UK');
+        break;
+    }
   }
   
   const style = await getStylePreference(options.style as ImageStyle, isInteractive);
