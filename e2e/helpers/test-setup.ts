@@ -15,6 +15,9 @@ export interface TestEnvironment {
 export async function createTestEnvironment(): Promise<TestEnvironment> {
   const tmpDir = await tmpdir({ unsafeCleanup: true })
   
+  // Set isolated config directory for this test
+  process.env.VINCENT_TEST_HOME_DIR = path.join(tmpDir.path, '.vincent-test')
+  
   return {
     tmpDir: tmpDir.path,
     cleanup: async () => {
@@ -23,6 +26,8 @@ export async function createTestEnvironment(): Promise<TestEnvironment> {
       } catch (error) {
         console.warn(`Failed to cleanup test directory: ${error}`)
       }
+      // Clean up env variable
+      delete process.env.VINCENT_TEST_HOME_DIR
       tmpDir.cleanup()
     }
   }

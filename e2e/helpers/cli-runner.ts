@@ -1,6 +1,7 @@
 import { execa, type ExecaReturnValue } from 'execa'
 import path from 'path'
 import { fileURLToPath } from 'url'
+import os from 'os'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -30,7 +31,9 @@ export class CLIRunner {
     reject: false,
     env: {
       NODE_ENV: 'test',
-      CI: 'true'
+      CI: 'true',
+      // Isolate test config from user's actual config
+      VINCENT_TEST_HOME_DIR: path.join(os.tmpdir(), `vincent-test-${Date.now()}`)
     }
   }
 
@@ -92,7 +95,7 @@ export class CLIRunner {
       ...options,
       env: {
         ...options.env,
-        GEMINI_API_KEY: '', // Ensure no real API key is used
+        // Don't set GEMINI_API_KEY so the CLI will prompt for it
       }
     })
   }
@@ -105,7 +108,7 @@ export class CLIRunner {
       ...options,
       env: {
         ...options.env,
-        GEMINI_API_KEY: 'mock-api-key-for-testing',
+        GEMINI_API_KEY: options.env?.GEMINI_API_KEY || 'mock',
         NODE_ENV: 'test',
         CI: 'true'
       }

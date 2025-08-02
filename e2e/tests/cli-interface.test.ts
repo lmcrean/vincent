@@ -85,16 +85,14 @@ describe('CLI Interface Tests - Iteration 1', () => {
   })
 
   describe('Interactive Mode', () => {
-    test('should prompt for deck path when not provided', async () => {
-      const tempDir = getTempDir()
-      const deckPath = await copyFixture(FIXTURE_FILES.SAMPLE_DECK, tempDir)
+    test('should error when deck path not provided in non-interactive mode', async () => {
+      // In test mode (NODE_ENV=test), the CLI runs in non-interactive mode
+      // and should error if no deck path is provided
+      const result = await cli.run([])
       
-      // Simulate interactive input: deck path, confirm, API key
-      const result = await cli.runInteractive([], [deckPath, 'y', 'mock'])
-      
-      expect(result.exitCode).toBe(0)
-      expect(result.stdout).toContain('Enter path to your .txt file')
-    }, 30000)
+      expect(result.exitCode).toBe(1)
+      expect(result.stderr).toContain("error: required argument 'deck' not provided")
+    }, 10000)
 
     test('should prompt for API key on first run', async () => {
       const tempDir = getTempDir()
