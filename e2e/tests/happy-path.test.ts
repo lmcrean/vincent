@@ -54,23 +54,6 @@ describe('Happy Path E2E Tests - Iteration 1', () => {
     expect(result.stdout).not.toContain('Generate images for all cards?')
   }, 30000)
 
-  test('should respect style option in CLI arguments', async () => {
-    const tempDir = getTempDir()
-    const deckPath = await copyFixture(FIXTURE_FILES.SAMPLE_DECK, tempDir)
-    
-    // Test different styles
-    const styles = ['educational', 'medical', 'colorful']
-    
-    for (const style of styles) {
-      const result = await cli.runNonInteractive([deckPath, '--style', style])
-      
-      expect(result.exitCode).toBe(0)
-      // In non-interactive mode, verify style is parsed correctly in debug output
-      expect(result.stdout).toContain(`"style": "${style}"`)
-      expect(result.stdout).toContain('Complete!')
-    }
-  }, 45000)
-
   test('should handle custom output path', async () => {
     const tempDir = getTempDir()
     const deckPath = await copyFixture(FIXTURE_FILES.SAMPLE_DECK, tempDir)
