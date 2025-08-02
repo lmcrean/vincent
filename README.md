@@ -121,6 +121,18 @@ vincent deck.txt --style medical
 vincent deck.txt --dry-run
 ```
 
+## Development & Testing
+
+For development or testing without a Gemini API key, use mock mode:
+
+```bash
+# Mock mode - generates placeholder images for testing
+npx tsx src/cli.ts --mock test-deck.txt
+
+# This creates test files without making API calls
+# Perfect for development and CI/CD testing
+```
+
 ## API Key Setup
 
 On first run, Vincent will guide you through getting a free Gemini API key:
