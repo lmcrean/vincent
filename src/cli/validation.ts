@@ -7,7 +7,7 @@ export function validateInputFile(deckPath: string): void {
 }
 
 export function validateStyleOption(options: CLIOptions): void {
-  if (options.style && !['educational', 'medical', 'colorful', 'minimal'].includes(options.style)) {
+  if (options.style && !['educational', 'medical', 'colorful', 'minimal', 'iconic'].includes(options.style)) {
     logger.error('Invalid style');
     process.exit(1);
   }

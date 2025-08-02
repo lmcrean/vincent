@@ -1,0 +1,3 @@
+What is photosynthesis?;The process by which plants convert light into energy;<img src='card-001.png'>
+What does DNA stand for?;Deoxyribonucleic acid;<img src='card-002.png'>
+How does the heart work?;The heart pumps blood through the body using chambers and valves;<img src='card-003.png'>
